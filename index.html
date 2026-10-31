@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Переводчик раскладки и языков</title>
+    <title>Переводчик раскладки</title>
     <style>
         /* Цветовые схемы для всех тем */
         :root {
@@ -107,7 +107,7 @@
         }
         textarea {
             width: 100%;
-            height: 110px;
+            height: 120px;
             padding: 12px;
             border: 2px solid var(--border-color);
             background-color: var(--input-bg);
@@ -116,38 +116,18 @@
             font-size: 16px;
             resize: vertical;
             box-sizing: border-box;
+            margin-bottom: 15px;
             transition: all 0.3s ease;
         }
         textarea:focus {
             border-color: #4299e1;
             outline: none;
         }
-
-        /* Новая центральная строка выбора языков */
-        .lang-select-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin: 15px 0;
-        }
-        .lang-select {
-            padding: 8px 15px;
-            border-radius: 8px;
-            border: 2px solid var(--border-color);
-            background-color: var(--input-bg);
-            color: var(--text-main);
-            font-size: 15px;
-            cursor: pointer;
-            outline: none;
-            font-weight: 500;
-        }
-
         .btn {
             display: block;
             width: 100%;
             background: var(--btn-bg);
-            background-color: #3182ce;
+            background-color: #3182ce; /* Запасной вариант */
             color: white;
             border: none;
             padding: 12px;
@@ -163,7 +143,7 @@
             opacity: 0.9;
         }
 
-        /* Московские часы */
+        /* Новые стили для московских часов */
         .clock-box {
             text-align: center;
             border-top: 1px solid var(--border-color);
@@ -195,26 +175,9 @@
         </select>
     </div>
     
-    <h1>Переводчик раскладки и языков</h1>
-    <p class="subtitle">Исправим раскладку и переведем на любой язык мира!</p>
-    
+    <h1>Переводчик раскладки (QWERTY ⇄ ЙЦУКЕН)</h1>
+    <p class="subtitle">Если ваш друг не поменял раскладку с английской на русскую — мы в помощь!</p>
     <textarea id="input" placeholder="Вставьте сюда текст (например, ghbdtn...)"></textarea>
-    
-    <!-- Новая центральная строка выбора целевого языка -->
-    <div class="lang-select-container">
-        <span style="font-size: 14px; color: var(--text-sub);">Перевести результат на:</span>
-        <select class="lang-select" id="langSelect">
-            <option value="ru">🇷🇺 Русский (Без перевода)</option>
-            <option value="en">🇺🇸 Английский</option>
-            <option value="zh">🇨🇳 Китайский</option>
-            <option value="es">🇪🇸 Испанский</option>
-            <option value="de">🇩🇪 Немецкий</option>
-            <option value="fr">🇫🇷 Французский</option>
-            <option value="ar">🇸🇦 Арабский</option>
-            <option value="ja">🇯🇵 Японский</option>
-        </select>
-    </div>
-
     <textarea id="output" placeholder="Результат появится здесь..." readonly></textarea>
     <button class="btn" onclick="copyText()">Копировать результат</button>
 
@@ -238,97 +201,67 @@ const map = {
 const input = document.getElementById('input');
 const output = document.getElementById('output');
 const themeSelect = document.getElementById('themeSelect');
-const langSelect = document.getElementById('langSelect');
 
-let debounceTimeout;
-
-// Функция для обработки текста и перевода
-function processText() {
+// Логика перевода
+input.addEventListener('input', () => {
     let text = input.value;
-    
-    if (!text.trim()) {
-        output.value = '';
-        return;
-    }
-
-    // 1. Сначала исправляем раскладку клавиатуры
-    let fixedLayoutText = '';
+    let result = '';
     for (let char of text) {
-        fixedLayoutText += map[char] || char;
+        result += map[char] || char;
     }
-
-    const targetLang = langSelect.value;
-
-    // 2. Если выбран Русский, выводим исправленный текст сразу
-    if (targetLang === 'ru') {
-        output.value = fixedLayoutText;
-        return;
-    }
-
-    // 3. Если выбран другой язык, отправляем запрос в бесплатное Google Translate API
-    output.value = 'Перевод... ⏳';
-    
-    // Небольшая задержка (дебаунс), чтобы не спамить запросами при каждой набранной букве
-    clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => {
-        const url = `https://googleapis.com{targetLang}&dt=t&q=${encodeURIComponent(fixedLayoutText)}`;
-        
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                // Собираем весь текст перевода из ответа API
-                let translatedText = data[0].map(item => item[0]).join('');
-                output.value = translatedText;
-            })
-            .catch(error => {
-                output.value = 'Ошибка перевода. Проверьте интернет.';
-                console.error(error);
-            });
-    }, 500); // задержка в полсекунды после окончания ввода
-}
-
-// Слушатели событий
-input.addEventListener('input', processText);
-langSelect.addEventListener('change', processText);
+    output.value = result;
+});
 
 // Логика копирования
 function copyText() {
-    if (!output.value || output.value === 'Перевод... ⏳') return;
     output.select();
     document.execCommand('copy');
-    alert('Текст успешно скопирован!');
+    alert('Текст скопирован!');
 }
 
-// Логика переключения тем
+// Логика переключения тем через выпадающее меню
 themeSelect.addEventListener('change', (e) => {
     const selectedTheme = e.target.value;
     if (selectedTheme === 'light') {
-document.documentElement.removeAttribute('data-theme');
-} else {
-document.documentElement.setAttribute('data-theme', selectedTheme);
-}
+        document.documentElement.removeAttribute('data-theme');
+    } else {
+        document.documentElement.setAttribute('data-theme', selectedTheme);
+    }
 });
+
 // Логика московских часов
 function updateMskClock() {
-const clockTime = document.getElementById('clockTime');
-const clockDate = document.getElementById('clockDate');
-const now = new Date();
-const timeString = now.toLocaleTimeString('ru-RU', {
-timeZone: 'Europe/Moscow',
-hour: '2-digit',
-minute: '2-digit',
-second: '2-digit'
-});
-clockTime.textContent = timeString;
-const dateOptions = {
-timeZone: 'Europe/Moscow',
-weekday: 'long',
-day: 'numeric',
-month: 'long'
-};
-let dateString = now.toLocaleDateString('ru-RU', dateOptions);
-dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1) + ' (МСК)';
-clockDate.textContent = dateString;
+    const clockTime = document.getElementById('clockTime');
+    const clockDate = document.getElementById('clockDate');
+    const now = new Date();
+
+    // Получаем точное время в Москве
+    const timeString = now.toLocaleTimeString('ru-RU', {
+        timeZone: 'Europe/Moscow',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+    clockTime.textContent = timeString;
+
+    // Получаем текущую дату в Москве
+    const dateOptions = { 
+        timeZone: 'Europe/Moscow', 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long' 
+    };
+    let dateString = now.toLocaleDateString('ru-RU', dateOptions);
+    
+    // Делаем первую букву дня недели заглавной и добавляем пометку МСК
+    dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1) + ' (МСК)';
+    clockDate.textContent = dateString;
 }
+
+// Запуск часов каждую секунду
 setInterval(updateMskClock, 1000);
 updateMskClock();
+</script>
+
+</body>
+</html>
