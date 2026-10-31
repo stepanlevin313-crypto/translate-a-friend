@@ -50,6 +50,51 @@
             --btn-hover: linear-gradient(135deg, #95a5a6, #7f8c8d);
         }
 
+        /* Новые неоновые и глубокие темы */
+        [data-theme="purple"] {
+            --bg-color: #120e1a;
+            --card-bg: #1f1a2e;
+            --text-main: #f3ebff;
+            --text-sub: #b794f4;
+            --border-color: #553c9a;
+            --input-bg: #120e1a;
+            --btn-bg: #805ad5;
+            --btn-hover: #6b46c1;
+        }
+
+        [data-theme="red"] {
+            --bg-color: #1f0b0b;
+            --card-bg: #361414;
+            --text-main: #ffebeb;
+            --text-sub: #feb2b2;
+            --border-color: #9b2c2c;
+            --input-bg: #1f0b0b;
+            --btn-bg: #e53e3e;
+            --btn-hover: #c53030;
+        }
+
+        [data-theme="blue"] {
+            --bg-color: #0b132b;
+            --card-bg: #1c2541;
+            --text-main: #edf2f7;
+            --text-sub: #64dfdf;
+            --border-color: #3a506b;
+            --input-bg: #0b132b;
+            --btn-bg: #00b4d8;
+            --btn-hover: #0077b6;
+        }
+
+        [data-theme="orange"] {
+            --bg-color: #1f140a;
+            --card-bg: #332212;
+            --text-main: #fff5eb;
+            --text-sub: #fbd38d;
+            --border-color: #dd6b20;
+            --input-bg: #1f140a;
+            --btn-bg: #ed8936;
+            --btn-hover: #dd6b20;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -120,14 +165,13 @@
             transition: all 0.3s ease;
         }
         textarea:focus {
-            border-color: #4299e1;
+            border-color: var(--btn-bg);
             outline: none;
         }
         .btn {
             display: block;
             width: 100%;
             background: var(--btn-bg);
-            background-color: #3182ce; /* Запасной вариант */
             color: white;
             border: none;
             padding: 12px;
@@ -172,6 +216,10 @@
             <option value="dark">🌙 Тёмная</option>
             <option value="gold">👑 Золотая</option>
             <option value="silver">🥈 Серебряная</option>
+            <option value="purple">🔮 Фиолетовая</option>
+            <option value="red">❤️ Красная</option>
+            <option value="blue">💙 Синяя</option>
+            <option value="orange">🍊 Оранжевая</option>
         </select>
     </div>
     
@@ -214,6 +262,7 @@ input.addEventListener('input', () => {
 
 // Логика копирования
 function copyText() {
+    if (!output.value) return;
     output.select();
     document.execCommand('copy');
     alert('Текст скопирован!');
@@ -235,7 +284,6 @@ function updateMskClock() {
     const clockDate = document.getElementById('clockDate');
     const now = new Date();
 
-    // Получаем точное время в Москве
     const timeString = now.toLocaleTimeString('ru-RU', {
         timeZone: 'Europe/Moscow',
         hour: '2-digit',
@@ -244,7 +292,6 @@ function updateMskClock() {
     });
     clockTime.textContent = timeString;
 
-    // Получаем текущую дату в Москве
     const dateOptions = { 
         timeZone: 'Europe/Moscow', 
         weekday: 'long', 
@@ -253,15 +300,14 @@ function updateMskClock() {
     };
     let dateString = now.toLocaleDateString('ru-RU', dateOptions);
     
-    // Делаем первую букву дня недели заглавной и добавляем пометку МСК
     dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1) + ' (МСК)';
     clockDate.textContent = dateString;
 }
 
-// Запуск часов каждую секунду
 setInterval(updateMskClock, 1000);
 updateMskClock();
 </script>
 
 </body>
 </html>
+
