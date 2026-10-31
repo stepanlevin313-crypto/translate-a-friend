@@ -136,10 +136,30 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background 0.2s, opacity 0.2s;
+            margin-bottom: 20px;
         }
         .btn:hover {
             background: var(--btn-hover);
             opacity: 0.9;
+        }
+
+        /* Московские часы */
+        .clock-box {
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+            margin-top: 5px;
+        }
+        .clock-time {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: var(--text-main);
+        }
+        .clock-date {
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-top: 3px;
         }
     </style>
 </head>
@@ -156,10 +176,16 @@
     </div>
     
     <h1>Переводчик раскладки (QWERTY ⇄ ЙЦУКЕН)</h1>
-    <p class="subtitle">Если ваш друг не поменял раскладку с английской на русскую — мы в помощь!</p>
+    <p class="subtitle">Если ваш friend не поменял раскладку с английской на русскую — мы в помощь!</p>
     <textarea id="input" placeholder="Вставьте сюда текст (например, ghbdtn...)"></textarea>
     <textarea id="output" placeholder="Результат появится здесь..." readonly></textarea>
     <button class="btn" onclick="copyText()">Копировать результат</button>
+
+    <!-- Блок с часами по МСК -->
+    <div class="clock-box">
+        <div class="clock-time" id="clockTime">00:00:00</div>
+        <div class="clock-date" id="clockDate">Время по МСК</div>
+    </div>
 </div>
 
 <script>
@@ -176,7 +202,7 @@ const input = document.getElementById('input');
 const output = document.getElementById('output');
 const themeSelect = document.getElementById('themeSelect');
 
-// Логика перевода
+// Логика перевода раскладки
 input.addEventListener('input', () => {
     let text = input.value;
     let result = '';
@@ -202,6 +228,39 @@ themeSelect.addEventListener('change', (e) => {
         document.documentElement.setAttribute('data-theme', selectedTheme);
     }
 });
+
+// Логика московских часов
+function updateMskClock() {
+    const clockTime = document.getElementById('clockTime');
+    const clockDate = document.getElementById('clockDate');
+    const now = new Date();
+
+    // Получаем точное время в Москве
+    const timeString = now.toLocaleTimeString('ru-RU', {
+        timeZone: 'Europe/Moscow',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+    clockTime.textContent = timeString;
+
+    // Получаем текущую дату в Москве
+    const dateOptions = { 
+        timeZone: 'Europe/Moscow', 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long' 
+    };
+    let dateString = now.toLocaleDateString('ru-RU', dateOptions);
+    
+    // Делаем первую букву дня недели заглавной и добавляем пометку МСК
+    dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1) + ' (МСК)';
+    clockDate.textContent = dateString;
+}
+
+// Запуск часов каждую секунду
+setInterval(updateMskClock, 1000);
+updateMskClock();
 </script>
 
 </body>
