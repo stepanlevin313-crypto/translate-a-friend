@@ -214,7 +214,6 @@ const statusMessage = document.getElementById('statusMessage');
 
 let timeoutId = null;
 
-// Названия языков для автоматического изменения заголовков
 const languageNames = {
     'en|ru': { title: 'Перевод слов (EN ➔ RU)', sub: 'Переводим английский текст на русский язык!', ph: 'Type English text here...' },
     'ru|en': { title: 'Перевод слов (RU ➔ EN)', sub: 'Переводим русский текст на английский язык!', ph: 'Введите текст на русском...' },
@@ -228,14 +227,11 @@ const languageNames = {
     'ru|fr': { title: 'Перевод слов (RU ➔ FR)', sub: 'Переводим русский текст на французский язык!', ph: 'Введите текст на русском...' }
 };
 
-// Смена текстов при переключении режимов
 modeSelect.addEventListener('change', () => {
     output.value = '';
     input.value = '';
     statusMessage.textContent = '';
-    
     const mode = modeSelect.value;
-    
     if (mode === 'layout') {
         mainTitle.textContent = 'Переводчик раскладки';
         mainSubtitle.textContent = 'Если ваш друг не поменял раскладку с английской на русскую — мы в помощь!';
@@ -247,24 +243,20 @@ modeSelect.addEventListener('change', () => {
     }
 });
 
-// Главная логика ввода
 input.addEventListener('input', () => {
     const mode = modeSelect.value;
-    
     if (mode === 'layout') {
-        // Режим раскладки (мгновенно)
         let text = input.value;
         let result = '';
         for (let char of text) {
             result += map[char] || char;
         }
+        output.value = result;
+    } else {
+        clearTimeout(timeoutId);
+        if (!input.value.trim()) {
+            output.value = '';
 Use code with caution.
-output.value = result;
-} else {
-// Режим онлайн-перевода слов разных языков
-clearTimeout(timeoutId);
-if (!input.value.trim()) {
-output.value = '';
 statusMessage.textContent = '';
 return;
 }
@@ -283,13 +275,11 @@ statusMessage.textContent = 'Ошибка сети. Попробуйте еще 
 }, 800);
 }
 });
-// Логика копирования
 function copyText() {
 output.select();
 document.execCommand('copy');
 alert('Текст скопирован!');
 }
-// Логика переключения тем
 themeSelect.addEventListener('change', (e) => {
 const selectedTheme = e.target.value;
 if (selectedTheme === 'light') {
