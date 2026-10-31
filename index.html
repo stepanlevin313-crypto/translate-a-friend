@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Переводчик раскладки</title>
+    <title>Мульти Переводчик PRO</title>
     <style>
         /* Цветовые схемы для всех тем */
         :root {
@@ -75,14 +75,16 @@
             box-sizing: border-box;
         }
         
-        /* Удобное меню выбора тем сверху */
-        .theme-select-container {
+        .controls-container {
             display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
-        .theme-select {
-            padding: 6px 12px;
+
+        .select-styled {
+            padding: 8px 12px;
             border-radius: 8px;
             border: 2px solid var(--border-color);
             background-color: var(--input-bg);
@@ -91,6 +93,8 @@
             font-size: 14px;
             outline: none;
             transition: all 0.3s ease;
+            flex: 1;
+            min-width: 150px;
         }
         
         h1 {
@@ -143,16 +147,37 @@
             opacity: 0.95;
             transform: translateY(-1px);
         }
-        .btn:active {
-            transform: translateY(1px);
+        .status-msg {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-top: -10px;
+            margin-bottom: 10px;
+            height: 15px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="theme-select-container">
-        <select class="theme-select" id="themeSelect">
+    <div class="controls-container">
+        <!-- Выбор режима и языков -->
+        <select class="select-styled" id="modeSelect">
+            <option value="layout">⌨️ Раскладка (QWERTY ⇄ ЙЦУКЕН)</option>
+            <option value="en|ru">🇺🇸 Английский ➔ 🇷🇺 Русский</option>
+            <option value="ru|en">🇷🇺 Русский ➔ 🇺🇸 Английский</option>
+            <option value="zh|ru">🇨🇳 Китайский ➔ 🇷🇺 Русский</option>
+            <option value="ru|zh">🇷🇺 Русский ➔ 🇨🇳 Китайский</option>
+            <option value="de|ru">🇩🇪 Немецкий ➔ 🇷🇺 Русский</option>
+            <option value="ru|de">🇷🇺 Русский ➔ 🇩🇪 Немецкий</option>
+            <option value="es|ru">🇪🇸 Испанский ➔ 🇷🇺 Русский</option>
+            <option value="ru|es">🇷🇺 Русский ➔ 🇪🇸 Испанский</option>
+            <option value="fr|ru">🇫🇷 Французский ➔ 🇷🇺 Русский</option>
+            <option value="ru|fr">🇷🇺 Русский ➔ 🇫🇷 Французский</option>
+        </select>
+
+        <!-- Выбор темы -->
+        <select class="select-styled" id="themeSelect">
             <option value="light">☀️ Светлая тема</option>
             <option value="dark">🌙 Тёмная тема</option>
             <option value="gold">👑 Золотая тема</option>
@@ -160,9 +185,11 @@
         </select>
     </div>
     
-    <h1>Переводчик раскладки (QWERTY ⇄ ЙЦУКЕН)</h1>
-    <p class="subtitle">Если ваш друг не поменял раскладку с английской на русскую — мы в помощь!</p>
-    <textarea id="input" placeholder="Вставьте сюда текст (например, ghbdtn...)"></textarea>
+    <h1 id="mainTitle">Мульти Переводчик</h1>
+    <p class="subtitle" id="mainSubtitle">Если ваш друг не поменял раскладку с английской на русскую — мы в помощь!</p>
+    
+    <textarea id="input" placeholder="Введите текст для обработки..."></textarea>
+    <div class="status-msg" id="statusMessage"></div>
     <textarea id="output" placeholder="Результат появится здесь..." readonly></textarea>
     <button class="btn" onclick="copyText()">Копировать результат</button>
 </div>
@@ -180,35 +207,94 @@ const map = {
 const input = document.getElementById('input');
 const output = document.getElementById('output');
 const themeSelect = document.getElementById('themeSelect');
+const modeSelect = document.getElementById('modeSelect');
+const mainTitle = document.getElementById('mainTitle');
+const mainSubtitle = document.getElementById('mainSubtitle');
+const statusMessage = document.getElementById('statusMessage');
 
-// Логика перевода
-input.addEventListener('input', () => {
-    let text = input.value;
-    let result = '';
-    for (let char of text) {
-        result += map[char] || char;
+let timeoutId = null;
+
+// Названия языков для автоматического изменения заголовков
+const languageNames = {
+    'en|ru': { title: 'Перевод слов (EN ➔ RU)', sub: 'Переводим английский текст на русский язык!', ph: 'Type English text here...' },
+    'ru|en': { title: 'Перевод слов (RU ➔ EN)', sub: 'Переводим русский текст на английский язык!', ph: 'Введите текст на русском...' },
+    'zh|ru': { title: 'Перевод слов (ZH ➔ RU)', sub: 'Переводим китайские иероглифы на русский язык!', ph: '输入中文...' },
+    'ru|zh': { title: 'Перевод слов (RU ➔ ZH)', sub: 'Переводим русский текст на китайские иероглифы!', ph: 'Введите текст на русском...' },
+    'de|ru': { title: 'Перевод слов (DE ➔ RU)', sub: 'Переводим немецкий текст на русский язык!', ph: 'Schreiben Sie auf Deutsch...' },
+    'ru|de': { title: 'Перевод слов (RU ➔ DE)', sub: 'Переводим русский текст на немецкий язык!', ph: 'Введите текст на русском...' },
+    'es|ru': { title: 'Перевод слов (ES ➔ RU)', sub: 'Переводим испанский текст на русский язык!', ph: 'Escribe en español...' },
+    'ru|es': { title: 'Перевод слов (RU ➔ ES)', sub: 'Переводим русский текст на испанский язык!', ph: 'Введите текст на русском...' },
+    'fr|ru': { title: 'Перевод слов (FR ➔ RU)', sub: 'Переводим французский текст на русский язык!', ph: 'Écrivez en français...' },
+    'ru|fr': { title: 'Перевод слов (RU ➔ FR)', sub: 'Переводим русский текст на французский язык!', ph: 'Введите текст на русском...' }
+};
+
+// Смена текстов при переключении режимов
+modeSelect.addEventListener('change', () => {
+    output.value = '';
+    input.value = '';
+    statusMessage.textContent = '';
+    
+    const mode = modeSelect.value;
+    
+    if (mode === 'layout') {
+        mainTitle.textContent = 'Переводчик раскладки';
+        mainSubtitle.textContent = 'Если ваш друг не поменял раскладку с английской на русскую — мы в помощь!';
+        input.placeholder = 'Вставьте сюда текст (например, ghbdtn...)';
+    } else if (languageNames[mode]) {
+        mainTitle.textContent = languageNames[mode].title;
+        mainSubtitle.textContent = languageNames[mode].sub;
+        input.placeholder = languageNames[mode].ph;
     }
-    output.value = result;
 });
 
+// Главная логика ввода
+input.addEventListener('input', () => {
+    const mode = modeSelect.value;
+    
+    if (mode === 'layout') {
+        // Режим раскладки (мгновенно)
+        let text = input.value;
+        let result = '';
+        for (let char of text) {
+            result += map[char] || char;
+        }
+Use code with caution.
+output.value = result;
+} else {
+// Режим онлайн-перевода слов разных языков
+clearTimeout(timeoutId);
+if (!input.value.trim()) {
+output.value = '';
+statusMessage.textContent = '';
+return;
+}
+statusMessage.textContent = 'Перевожу...';
+timeoutId = setTimeout(() => {
+const url = https://translated.net{encodeURIComponent(input.value)}&langpair=${mode};
+fetch(url)
+.then(res => res.json())
+.then(data => {
+output.value = data.responseData.translatedText;
+statusMessage.textContent = '';
+})
+.catch(() => {
+statusMessage.textContent = 'Ошибка сети. Попробуйте еще раз.';
+});
+}, 800);
+}
+});
 // Логика копирования
 function copyText() {
-    output.select();
-    document.execCommand('copy');
-    alert('Текст скопирован!');
+output.select();
+document.execCommand('copy');
+alert('Текст скопирован!');
 }
-
 // Логика переключения тем
 themeSelect.addEventListener('change', (e) => {
-    const selectedTheme = e.target.value;
-    if (selectedTheme === 'light') {
-        document.documentElement.removeAttribute('data-theme');
-    } else {
-        document.documentElement.setAttribute('data-theme', selectedTheme);
-    }
+const selectedTheme = e.target.value;
+if (selectedTheme === 'light') {
+document.documentElement.removeAttribute('data-theme');
+} else {
+document.documentElement.setAttribute('data-theme', selectedTheme);
+}
 });
-</script>
-
-</body>
-</html>
-
