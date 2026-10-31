@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мульти Переводчик PRO</title>
+    <title>Мульти Переводчик SUPER PRO</title>
     <style>
         /* Цветовые схемы для всех тем */
         :root {
@@ -15,6 +15,7 @@
             --input-bg: white;
             --btn-bg: #3182ce;
             --btn-hover: #2b6cb0;
+            --history-item: #f7fafc;
         }
 
         [data-theme="dark"] {
@@ -26,6 +27,7 @@
             --input-bg: #1a202c;
             --btn-bg: #4299e1;
             --btn-hover: #3182ce;
+            --history-item: #2d3748;
         }
 
         [data-theme="gold"] {
@@ -37,6 +39,7 @@
             --input-bg: #1c1912;
             --btn-bg: linear-gradient(135deg, #d4af37, #aa7c11);
             --btn-hover: linear-gradient(135deg, #aa7c11, #8c6f2d);
+            --history-item: #3a321a;
         }
 
         [data-theme="silver"] {
@@ -48,6 +51,7 @@
             --input-bg: #1e2229;
             --btn-bg: linear-gradient(135deg, #bdc3c7, #2c3e50);
             --btn-hover: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            --history-item: #373e4b;
         }
 
         body {
@@ -59,7 +63,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 100vh;
             transition: all 0.3s ease;
             box-sizing: border-box;
@@ -73,6 +77,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
             box-sizing: border-box;
+            margin-bottom: 20px;
         }
         
         .controls-container {
@@ -110,10 +115,17 @@
             margin-bottom: 25px;
             line-height: 1.4;
         }
+
+        .textarea-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
         textarea {
             width: 100%;
             height: 120px;
             padding: 14px;
+            padding-right: 45px; /* Место под иконки аудио/микрофона */
             border: 2px solid var(--border-color);
             background-color: var(--input-bg);
             color: var(--text-main);
@@ -121,13 +133,46 @@
             font-size: 16px;
             resize: vertical;
             box-sizing: border-box;
-            margin-bottom: 15px;
             transition: all 0.3s ease;
         }
         textarea:focus {
             border-color: #4299e1;
             outline: none;
         }
+
+        .audio-btn {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            background: rgba(0, 0, 0, 0.05);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            color: var(--text-main);
+        }
+        .audio-btn:hover {
+            transform: scale(1.1);
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .audio-btn.listening {
+            background: #ef4444;
+            color: white;
+            animation: pulse 1.2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
         .btn {
             display: block;
             width: 100%;
@@ -155,13 +200,59 @@
             margin-bottom: 10px;
             height: 15px;
         }
+
+        /* Стили блока истории */
+        .history-card {
+            max-width: 600px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        .history-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .clear-history {
+            font-size: 12px;
+            color: #ef4444;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        .history-item {
+            background: var(--bg-color);
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            border-left: 4px solid #3182ce;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .history-item .orig { color: var(--text-sub); font-size: 12px; }
+        .history-item .trans { font-weight: 500; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="controls-container">
-        <!-- Выбор режима и языков -->
+    <div class="controls-container"
+        
         <select class="select-styled" id="modeSelect">
             <option value="layout">⌨️ Раскладка (QWERTY ⇄ ЙЦУКЕН)</option>
             <option value="en|ru">🇺🇸 Английский ➔ 🇷🇺 Русский</option>
@@ -176,7 +267,6 @@
             <option value="ru|fr">🇷🇺 Русский ➔ 🇫🇷 Французский</option>
         </select>
 
-        <!-- Выбор темы -->
         <select class="select-styled" id="themeSelect">
             <option value="light">☀️ Светлая тема</option>
             <option value="dark">🌙 Тёмная тема</option>
@@ -188,22 +278,41 @@
     <h1 id="mainTitle">Мульти Переводчик</h1>
     <p class="subtitle" id="mainSubtitle">Если ваш друг не поменял раскладку с английской на русскую — мы в помощь!</p>
     
-    <textarea id="input" placeholder="Введите текст для обработки..."></textarea>
+    <div class="textarea-wrapper">
+        <textarea id="input" placeholder="Введите текст для обработки..."></textarea>
+        <button class="audio-btn" id="voiceBtn" title="Голосовой ввод">🎤</button>
+    </div>
+
     <div class="status-msg" id="statusMessage"></div>
-    <textarea id="output" placeholder="Результат появится здесь..." readonly></textarea>
+    
+    <div class="textarea-wrapper">
+        <textarea id="output" placeholder="Результат появится здесь..." readonly></textarea>
+        <button class="audio-btn" id="speakBtn" title="Озвучить перевод">🔊</button>
+    </div>
+
     <button class="btn" onclick="copyText()">Копировать результат</button>
+</div>
+
+<div class="history-card">
+    <div class="history-title">
+        <span>🕒 Последние переводы</span>
+        <button class="clear-history" onclick="clearHistory()">Очистить</button>
+    </div>
+    <div class="history-list" id="historyList">
+        <!-- Элементы истории добавляются сюда из JS -->
+    </div>
 </div>
 
 <script>
 const map = {
     'q':'й', 'w':'ц', 'e':'у', 'r':'к', 't':'е', 'y':'н', 'u':'г', 'i':'ш', 'o':'щ', 'p':'з', '[':'х', ']':'ъ',
     'a':'ф', 's':'ы', 'd':'в', 'f':'а', 'g':'п', 'h':'р', 'j':'о', 'k':'л', 'l':'д', ';':'ж', "'":'э',
-    'z':'я', 'x':'ч', 'c':'с', 'v':'м', 'b':'и', 'n':'т', 'm':'ь', ',':'б', '.':'ю', '/':'.',
-    'Q':'Й', 'W':'Ц', 'E':'У', 'R':'К', 'T':'Е', 'Y':'Н', 'U':'Г', 'I':'Ш', 'O':'Щ', 'P':'З', '{':'Х', '}':'Ъ',
-    'A':'Ф', 'S':'Ы', 'D':'В', 'F':'А', 'G':'П', 'H':'Р', 'J':'О', 'K':'Л', 'L':'Д', ':':'Ж', '"':'Э',
-    'Z':'Я', 'X':'Ч', 'C':'С', 'V':'М', 'B':'И', 'N':'Т', 'M':'Ь', '<':'Б', '>':'Ю', '?':','
+Use code with caution.
+'z':'я', 'x':'ч', 'c':'с', 'v':'м', 'b':'и', 'n':'т', 'm':'ь', ',':'б', '.':'ю', '/':'.',
+'Q':'Й', 'W':'Ц', 'E':'У', 'R':'К', 'T':'Е', 'Y':'Н', 'U':'Г', 'I':'Ш', 'O':'Щ', 'P':'З', '{':'Х', '}':'Ъ',
+'A':'Ф', 'S':'Ы', 'D':'В', 'F':'А', 'G':'П', 'H':'Р', 'J':'О', 'K':'Л', 'L':'Д', ':':'Ж', '"':'Э',
+'Z':'Я', 'X':'Ч', 'C':'С', 'V':'М', 'B':'И', 'N':'Т', 'M':'Ь', '<':'Б', '>':'Ю', '?':','
 };
-
 const input = document.getElementById('input');
 const output = document.getElementById('output');
 const themeSelect = document.getElementById('themeSelect');
@@ -211,52 +320,104 @@ const modeSelect = document.getElementById('modeSelect');
 const mainTitle = document.getElementById('mainTitle');
 const mainSubtitle = document.getElementById('mainSubtitle');
 const statusMessage = document.getElementById('statusMessage');
-
+const voiceBtn = document.getElementById('voiceBtn');
+const speakBtn = document.getElementById('speakBtn');
+const historyList = document.getElementById('historyList');
 let timeoutId = null;
-
+function playSound(type) {
+try {
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+const osc = ctx.createOscillator();
+const gain = ctx.createGain();
+osc.connect(gain);
+gain.connect(ctx.destination);
+if (type === 'click') {
+osc.frequency.setValueAtTime(600, ctx.currentTime);
+osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.08);
+gain.gain.setValueAtTime(0.1, ctx.currentTime);
+gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.08);
+osc.start(); osc.stop(ctx.currentTime + 0.08);
+} else if (type === 'done') {
+osc.frequency.setValueAtTime(800, ctx.currentTime);
+osc.frequency.setValueAtTime(1000, ctx.currentTime + 0.05);
+gain.gain.setValueAtTime(0.08, ctx.currentTime);
+gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.15);
+osc.start(); osc.stop(ctx.currentTime + 0.15);
+}
+} catch(e) {}
+}
 const languageNames = {
-    'en|ru': { title: 'Перевод слов (EN ➔ RU)', sub: 'Переводим английский текст на русский язык!', ph: 'Type English text here...' },
-    'ru|en': { title: 'Перевод слов (RU ➔ EN)', sub: 'Переводим русский текст на английский язык!', ph: 'Введите текст на русском...' },
-    'zh|ru': { title: 'Перевод слов (ZH ➔ RU)', sub: 'Переводим китайские иероглифы на русский язык!', ph: '输入中文...' },
-    'ru|zh': { title: 'Перевод слов (RU ➔ ZH)', sub: 'Переводим русский текст на китайские иероглифы!', ph: 'Введите текст на русском...' },
-    'de|ru': { title: 'Перевод слов (DE ➔ RU)', sub: 'Переводим немецкий текст на русский язык!', ph: 'Schreiben Sie auf Deutsch...' },
-    'ru|de': { title: 'Перевод слов (RU ➔ DE)', sub: 'Переводим русский текст на немецкий язык!', ph: 'Введите текст на русском...' },
-    'es|ru': { title: 'Перевод слов (ES ➔ RU)', sub: 'Переводим испанский текст на русский язык!', ph: 'Escribe en español...' },
-    'ru|es': { title: 'Перевод слов (RU ➔ ES)', sub: 'Переводим русский текст на испанский язык!', ph: 'Введите текст на русском...' },
-    'fr|ru': { title: 'Перевод слов (FR ➔ RU)', sub: 'Переводим французский текст на русский язык!', ph: 'Écrivez en français...' },
-    'ru|fr': { title: 'Перевод слов (RU ➔ FR)', sub: 'Переводим русский текст на французский язык!', ph: 'Введите текст на русском...' }
+'en|ru': { title: 'Перевод слов (EN ➔ RU)', sub: 'Переводим английский текст на русский язык!', ph: 'Type English text here...', lang: 'en-US' },
+'ru|en': { title: 'Перевод слов (RU ➔ EN)', sub: 'Переводим русский текст на английский язык!', ph: 'Введите текст на русском...', lang: 'ru-RU' },
+'zh|ru': { title: 'Перевод слов (ZH ➔ RU)', sub: 'Переводим китайские иероглифы на русский язык!', ph: '输入中文...', lang: 'zh-CN' },
+'ru|zh': { title: 'Перевод слов (RU ➔ ZH)', sub: 'Переводим русский текст на китайские иероглифы!', ph: 'Введите текст на русском...', lang: 'ru-RU' },
+'de|ru': { title: 'Перевод слов (DE ➔ RU)', sub: 'Переводим немецкий текст на русский язык!', ph: 'Schreiben Sie auf Deutsch...', lang: 'de-DE' },
+'ru|de': { title: 'Перевод слов (RU ➔ DE)', sub: 'Переводим русский текст на немецкий язык!', ph: 'Введите текст на русском...', lang: 'ru-RU' },
+'es|ru': { title: 'Перевод слов (ES ➔ RU)', sub: 'Переводим испанский текст на русский язык!', ph: 'Escribe en español...', lang: 'es-ES' },
+'ru|es': { title: 'Перевод слов (RU ➔ ES)', sub: 'Переводим русский текст на испанский язык!', ph: 'Введите текст на русском...', lang: 'ru-RU' },
+'fr|ru': { title: 'Перевод слов (FR ➔ RU)', sub: 'Переводим французский текст на русский язык!', ph: 'Écrivez en français...', lang: 'fr-FR' },
+'ru|fr': { title: 'Перевод слов (RU ➔ FR)', sub: 'Переводим русский текст на французский язык!', ph: 'Введите текст на русском...', lang: 'ru-RU' }
 };
-
-modeSelect.addEventListener('change', () => {
-    output.value = '';
-    input.value = '';
-    statusMessage.textContent = '';
-    const mode = modeSelect.value;
-    if (mode === 'layout') {
-        mainTitle.textContent = 'Переводчик раскладки';
-        mainSubtitle.textContent = 'Если ваш друг не поменял раскладку с английской на русскую — мы в помощь!';
-        input.placeholder = 'Вставьте сюда текст (например, ghbdtn...)';
-    } else if (languageNames[mode]) {
-        mainTitle.textContent = languageNames[mode].title;
-        mainSubtitle.textContent = languageNames[mode].sub;
-        input.placeholder = languageNames[mode].ph;
-    }
+function loadHistory() {
+const history = JSON.parse(localStorage.getItem('trans_history') || '[]');
+historyList.innerHTML = history.length === 0 ? 'История пуста' : '';
+history.forEach(item => {
+const div = document.createElement('div');
+div.className = 'history-item';
+div.innerHTML = <span class="orig">[${item.mode}] ${item.from}</span><span class="trans">${item.to}</span>;
+historyList.appendChild(div);
 });
-
+}
+function saveToHistory(fromText, toText, modeName) {
+if (!fromText.trim() || !toText.trim()) return;
+let history = JSON.parse(localStorage.getItem('trans_history') || '[]');
+history = history.filter(h => h.from !== fromText);
+history.unshift({ from: fromText, to: toText, mode: modeName });
+if (history.length > 10) history.pop(); // Храним топ-10
+localStorage.setItem('trans_history', JSON.stringify(history));
+loadHistory();
+}
+function clearHistory() {
+playSound('click');
+localStorage.removeItem('trans_history');
+loadHistory();
+}
+modeSelect.addEventListener('change', () => {
+output.value = '';
+input.value = '';
+statusMessage.textContent = '';
+const mode = modeSelect.value;
+if (mode === 'layout') {
+mainTitle.textContent = 'Переводчик раскладки';
+mainSubtitle.textContent = 'Если ваш друг не поменял раскладку с английской на русскую — мы в помощь!';
+input.placeholder = 'Вставьте сюда текст (например, ghbdtn...)';
+} else if (languageNames[mode]) {
+mainTitle.textContent = languageNames[mode].title;
+mainSubtitle.textContent = languageNames[mode].sub;
+input.placeholder = languageNames[mode].ph;
+}
+});
+// Обработка ввода текста
 input.addEventListener('input', () => {
-    const mode = modeSelect.value;
-    if (mode === 'layout') {
-        let text = input.value;
-        let result = '';
-        for (let char of text) {
-            result += map[char] || char;
-        }
-        output.value = result;
-    } else {
-        clearTimeout(timeoutId);
-        if (!input.value.trim()) {
-            output.value = '';
-Use code with caution.
+const mode = modeSelect.value;
+if (mode === 'layout') {
+let text = input.value;
+let result = '';
+for (let char of text) {
+result += map[char] || char;
+}
+output.value = result;
+clearTimeout(timeoutId);
+timeoutId = setTimeout(() => {
+if(output.value.trim()) {
+saveToHistory(input.value, output.value, 'Раскладка');
+playSound('done');
+}
+}, 1500);
+} else {
+clearTimeout(timeoutId);
+if (!input.value.trim()) {
+output.value = '';
 statusMessage.textContent = '';
 return;
 }
@@ -268,19 +429,72 @@ fetch(url)
 .then(data => {
 output.value = data.responseData.translatedText;
 statusMessage.textContent = '';
+const label = modeSelect.options[modeSelect.selectedIndex].text.split(' ')[0];
+saveToHistory(input.value, output.value, label);
+playSound('done');
 })
 .catch(() => {
 statusMessage.textContent = 'Ошибка сети. Попробуйте еще раз.';
 });
-}, 800);
+}, 1000);
 }
 });
+// 🎤 Голосовой ввод (Распознавание речи)
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (SpeechRecognition) {
+const recognition = new SpeechRecognition();
+recognition.interimResults = false;
+voiceBtn.addEventListener('click', () => {
+playSound('click');
+const mode = modeSelect.value;
+recognition.lang = mode === 'layout' ? 'en-US' : (languageNames[mode]?.lang || 'ru-RU');
+if (voiceBtn.classList.contains('listening')) {
+recognition.stop();
+} else {
+voiceBtn.classList.add('listening');
+statusMessage.textContent = 'Слушаю вас... Говорите';
+recognition.start();
+}
+});
+recognition.addEventListener('result', (e) => {
+const transcript = e.results[0][0].transcript;
+input.value = transcript;
+// Триггерим событие ввода текста для запуска перевода
+input.dispatchEvent(new Event('input'));
+});
+recognition.addEventListener('end', () => {
+voiceBtn.classList.remove('listening');
+if(statusMessage.textContent === 'Слушаю вас... Говорите') statusMessage.textContent = '';
+});
+} else {
+voiceBtn.style.display = 'none';
+// 🔊
+speakBtn.addEventListener('click', () => {
+playSound('click');
+if (!output.value.trim()) return;
+const mode = modeSelect.value;
+let targetLang = 'ru-RU'; 
+if (mode !== 'layout') {
+targetLang = mode.split('|')[1];
+if (targetLang === 'en') targetLang = 'en-US';
+if (targetLang === 'zh') targetLang = 'zh-CN';
+if (targetLang === 'de') targetLang = 'de-DE';
+if (targetLang === 'es') targetLang = 'es-ES';
+if (targetLang === 'fr') targetLang = 'fr-FR';
+if (targetLang === 'ru') targetLang = 'ru-RU';
+}
+const utterance = new SpeechSynthesisUtterance(output.value);
+utterance.lang = targetLang;
+window.speechSynthesis.speak(utterance);
+});
 function copyText() {
+playSound('click');
 output.select();
 document.execCommand('copy');
 alert('Текст скопирован!');
 }
 themeSelect.addEventListener('change', (e) => {
+playSound('click');
 const selectedTheme = e.target.value;
 if (selectedTheme === 'light') {
 document.documentElement.removeAttribute('data-theme');
@@ -288,3 +502,4 @@ document.documentElement.removeAttribute('data-theme');
 document.documentElement.setAttribute('data-theme', selectedTheme);
 }
 });
+loadHistory();
