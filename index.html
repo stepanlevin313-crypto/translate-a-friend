@@ -5,31 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Переводчик раскладки</title>
     <style>
+        /* Цветовые схемы для всех тем */
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg: white;
+            --text-main: #333333;
+            --text-sub: #666666;
+            --border-color: #e2e8f0;
+            --input-bg: white;
+            --btn-bg: #3182ce;
+            --btn-hover: #2b6cb0;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a202c;
+            --card-bg: #2d3748;
+            --text-main: #f7fafc;
+            --text-sub: #a0aec0;
+            --border-color: #4a5568;
+            --input-bg: #1a202c;
+            --btn-bg: #4299e1;
+            --btn-hover: #3182ce;
+        }
+
+        [data-theme="gold"] {
+            --bg-color: #1c1912;
+            --card-bg: #2d2613;
+            --text-main: #f7e7c4;
+            --text-sub: #cfa861;
+            --border-color: #8c6f2d;
+            --input-bg: #1c1912;
+            --btn-bg: linear-gradient(135deg, #d4af37, #aa7c11);
+            --btn-hover: linear-gradient(135deg, #aa7c11, #8c6f2d);
+        }
+
+        [data-theme="silver"] {
+            --bg-color: #1e2229;
+            --card-bg: #2d323b;
+            --text-main: #e2e8f0;
+            --text-sub: #94a3b8;
+            --border-color: #64748b;
+            --input-bg: #1e2229;
+            --btn-bg: linear-gradient(135deg, #bdc3c7, #2c3e50);
+            --btn-hover: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            transition: all 0.3s ease;
         }
         .container {
             max-width: 600px;
             width: 100%;
-            background: white;
+            background: var(--card-bg);
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            position: relative;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
         }
+        
+        /* Стили для выбора тем */
+        .theme-select-container {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .theme-select {
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--input-bg);
+            color: var(--text-main);
+            cursor: pointer;
+            font-size: 14px;
+            outline: none;
+        }
+        
         h1 {
-            color: #333;
             text-align: center;
             font-size: 24px;
             margin-bottom: 5px;
+            margin-top: 15px;
         }
         p.subtitle {
-            color: #666;
+            color: var(--text-sub);
             text-align: center;
             font-size: 14px;
             margin-bottom: 25px;
@@ -38,21 +109,25 @@
             width: 100%;
             height: 120px;
             padding: 12px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border-color);
+            background-color: var(--input-bg);
+            color: var(--text-main);
             border-radius: 8px;
             font-size: 16px;
             resize: vertical;
             box-sizing: border-box;
             margin-bottom: 15px;
+            transition: all 0.3s ease;
         }
         textarea:focus {
-            border-color: #3182ce;
+            border-color: #4299e1;
             outline: none;
         }
         .btn {
             display: block;
             width: 100%;
-            background-color: #3182ce;
+            background: var(--btn-bg);
+            background-color: #3182ce; /* Запасной вариант */
             color: white;
             border: none;
             padding: 12px;
@@ -60,16 +135,26 @@
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.2s, opacity 0.2s;
         }
         .btn:hover {
-            background-color: #2b6cb0;
+            background: var(--btn-hover);
+            opacity: 0.9;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <div class="theme-select-container">
+        <select class="theme-select" id="themeSelect">
+            <option value="light">☀️ Светлая</option>
+            <option value="dark">🌙 Тёмная</option>
+            <option value="gold">👑 Золотая</option>
+            <option value="silver">🥈 Серебряная</option>
+        </select>
+    </div>
+    
     <h1>Переводчик раскладки (QWERTY ⇄ ЙЦУКЕН)</h1>
     <p class="subtitle">Если ваш друг не поменял раскладку с английской на русскую — мы в помощь!</p>
     <textarea id="input" placeholder="Вставьте сюда текст (например, ghbdtn...)"></textarea>
@@ -89,7 +174,9 @@ const map = {
 
 const input = document.getElementById('input');
 const output = document.getElementById('output');
+const themeSelect = document.getElementById('themeSelect');
 
+// Логика перевода
 input.addEventListener('input', () => {
     let text = input.value;
     let result = '';
@@ -99,11 +186,22 @@ input.addEventListener('input', () => {
     output.value = result;
 });
 
+// Логика копирования
 function copyText() {
     output.select();
     document.execCommand('copy');
     alert('Текст скопирован!');
 }
+
+// Логика переключения тем через выпадающее меню
+themeSelect.addEventListener('change', (e) => {
+    const selectedTheme = e.target.value;
+    if (selectedTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+    } else {
+        document.documentElement.setAttribute('data-theme', selectedTheme);
+    }
+});
 </script>
 
 </body>
