@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Супер Переводчик Раскладки PRO</title>
+    <title>Переводчик раскладки</title>
     <style>
+        /* Цветовые схемы для всех тем */
         :root {
             --bg-color: #f4f7f6;
             --card-bg: white;
@@ -58,200 +59,107 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
             transition: all 0.3s ease;
-            box-sizing: border-box;
         }
         .container {
             max-width: 600px;
             width: 100%;
             background: var(--card-bg);
             padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            position: relative;
             transition: all 0.3s ease;
             box-sizing: border-box;
-            margin-bottom: 20px;
         }
         
-        .controls-container {
+        /* Стили для выбора тем */
+        .theme-select-container {
+            position: absolute;
+            top: 15px;
+            right: 15px;
             display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 20px;
+            align-items: center;
+            gap: 5px;
         }
-
-        .select-styled {
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 2px solid var(--border-color);
+        .theme-select {
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
             background-color: var(--input-bg);
             color: var(--text-main);
             cursor: pointer;
             font-size: 14px;
             outline: none;
-            transition: all 0.3s ease;
-            width: 100%;
         }
         
         h1 {
             text-align: center;
             font-size: 24px;
             margin-bottom: 5px;
-            margin-top: 5px;
+            margin-top: 15px;
         }
         p.subtitle {
             color: var(--text-sub);
             text-align: center;
             font-size: 14px;
             margin-bottom: 25px;
-            line-height: 1.4;
         }
-
-        .textarea-wrapper {
-            position: relative;
-            margin-bottom: 15px;
-        }
-
         textarea {
             width: 100%;
             height: 120px;
-            padding: 14px;
-            padding-right: 45px;
+            padding: 12px;
             border: 2px solid var(--border-color);
             background-color: var(--input-bg);
             color: var(--text-main);
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 16px;
             resize: vertical;
             box-sizing: border-box;
+            margin-bottom: 15px;
             transition: all 0.3s ease;
         }
         textarea:focus {
             border-color: #4299e1;
             outline: none;
         }
-
-        .audio-btn {
-            position: absolute;
-            right: 12px;
-            bottom: 12px;
-            background: rgba(0, 0, 0, 0.05);
-            border: none;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            transition: all 0.2s ease;
-            color: var(--text-main);
-        }
-        .audio-btn:hover {
-            transform: scale(1.1);
-            background: rgba(0, 0, 0, 0.1);
-        }
-
         .btn {
             display: block;
             width: 100%;
             background: var(--btn-bg);
+            background-color: #3182ce; /* Запасной вариант */
             color: white;
             border: none;
-            padding: 14px;
+            padding: 12px;
             font-size: 16px;
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: background 0.2s, opacity 0.2s;
         }
         .btn:hover {
-            opacity: 0.95;
-            transform: translateY(-1px);
+            background: var(--btn-hover);
+            opacity: 0.9;
         }
-
-        .history-card {
-            max-width: 600px;
-            width: 100%;
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-        .history-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .clear-history {
-            font-size: 12px;
-            color: #ef4444;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 180px;
-            overflow-y: auto;
-        }
-        .history-item {
-            background: var(--bg-color);
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            border-left: 4px solid #3182ce;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .history-item .orig { color: var(--text-sub); font-size: 12px; }
-        .history-item .trans { font-weight: 500; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="controls-container">
-        <select class="select-styled" id="themeSelect">
-            <option value="light">☀️ Светлая тема</option>
-            <option value="dark">🌙 Тёмная тема</option>
-            <option value="gold">👑 Золотая тема</option>
-            <option value="silver">🥈 Серебряная тема</option>
+    <div class="theme-select-container">
+        <select class="theme-select" id="themeSelect">
+            <option value="light">☀️ Светлая</option>
+            <option value="dark">🌙 Тёмная</option>
+            <option value="gold">👑 Золотая</option>
+            <option value="silver">🥈 Серебряная</option>
         </select>
     </div>
     
-    <h1>Мульти Переводчик Раскладки</h1>
+    <h1>Переводчик раскладки (QWERTY ⇄ ЙЦУКЕН)</h1>
     <p class="subtitle">Если ваш друг не поменял раскладку с английской на русскую — мы в помощь!</p>
-    
-    <div class="textarea-wrapper">
-        <textarea id="input" placeholder="Вставьте сюда текст (например, ghbdtn...)"></textarea>
-    </div>
-
-    <div class="textarea-wrapper">
-        <textarea id="output" placeholder="Результат появится здесь..." readonly></textarea>
-        <button class="audio-btn" id="speakBtn" title="Озвучить результат">🔊</button>
-    </div>
-
-    <button class="btn" id="copyBtn">Копировать результат</button>
-</div>
-
-<div class="history-card">
-    <div class="history-title">
-        <span>🕒 Последние переводы</span>
-        <button class="clear-history" id="clearBtn">Очистить</button>
-    </div>
-    <div class="history-list" id="historyList"></div>
+    <textarea id="input" placeholder="Вставьте сюда текст (например, ghbdtn...)"></textarea>
+    <textarea id="output" placeholder="Результат появится здесь..." readonly></textarea>
+    <button class="btn" onclick="copyText()">Копировать результат</button>
 </div>
 
 <script>
@@ -267,96 +175,35 @@ const map = {
 const input = document.getElementById('input');
 const output = document.getElementById('output');
 const themeSelect = document.getElementById('themeSelect');
-const speakBtn = document.getElementById('speakBtn');
-const copyBtn = document.getElementById('copyBtn');
-const clearBtn = document.getElementById('clearBtn');
-const historyList = document.getElementById('historyList');
 
-let timeoutId = null;
-
-function playSound(type) {
-    try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        if (type === 'click') {
-            osc.frequency.setValueAtTime(600, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.08);
-            gain.gain.setValueAtTime(0.1, ctx.currentTime);
-            gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.08);
-            osc.start(); osc.stop(ctx.currentTime + 0.08);
-        } else if (type === 'done') {
-            osc.frequency.setValueAtTime(800, ctx.currentTime);
-            osc.frequency.setValueAtTime(1000, ctx.currentTime + 0.05);
-            gain.gain.setValueAtTime(0.08, ctx.currentTime);
-            gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.15);
-            osc.start(); osc.stop(ctx.currentTime + 0.15);
-        }
-    } catch(e) {}
-}
-
-function loadHistory() {
-    const history = JSON.parse(localStorage.getItem('layout_history') || '[]');
-    historyList.innerHTML = history.length === 0 ? '<div style="color:var(--text-sub); font-size:13px; text-align:center; padding:10px;">История пуста</div>' : '';
-    history.forEach(item => {
-const div = document.createElement('div');
-div.className = 'history-item';
-div.innerHTML = <span class="orig">${item.from}</span><span class="trans">${item.to}</span>;
-historyList.appendChild(div);
-});
-}
-function saveToHistory(fromText, toText) {
-if (!fromText.trim() || !toText.trim()) return;
-let history = JSON.parse(localStorage.getItem('layout_history') || '[]');
-history = history.filter(h => h.from !== fromText);
-history.unshift({ from: fromText, to: toText });
-if (history.length > 5) history.pop();
-localStorage.setItem('layout_history', JSON.stringify(history));
-loadHistory();
-}
+// Логика перевода
 input.addEventListener('input', () => {
-let text = input.value;
-let result = '';
-for (let char of text) {
-result += map[char] || char;
+    let text = input.value;
+    let result = '';
+    for (let char of text) {
+        result += map[char] || char;
+    }
+    output.value = result;
+});
+
+// Логика копирования
+function copyText() {
+    output.select();
+    document.execCommand('copy');
+    alert('Текст скопирован!');
 }
-output.value = result;
-clearTimeout(timeoutId);
-if(result.trim()) {
-timeoutId = setTimeout(() => {
-saveToHistory(input.value, output.value);
-playSound('done');
-}, 1200);
-}
-});
-speakBtn.addEventListener('click', () => {
-playSound('click');
-if (!output.value.trim()) return;
-const utterance = new SpeechSynthesisUtterance(output.value);
-utterance.lang = 'ru-RU';
-window.speechSynthesis.speak(utterance);
-});
-copyBtn.addEventListener('click', () => {
-playSound('click');
-if (!output.value.trim()) return;
-output.select();
-document.execCommand('copy');
-alert('Текст скопирован!');
-});
-clearBtn.addEventListener('click', () => {
-playSound('click');
-localStorage.removeItem('layout_history');
-loadHistory();
-});
+
+// Логика переключения тем через выпадающее меню
 themeSelect.addEventListener('change', (e) => {
-playSound('click');
-const selectedTheme = e.target.value;
-if (selectedTheme === 'light') {
-document.documentElement.removeAttribute('data-theme');
-} else {
-document.documentElement.setAttribute('data-theme', selectedTheme);
-}
+    const selectedTheme = e.target.value;
+    if (selectedTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+    } else {
+        document.documentElement.setAttribute('data-theme', selectedTheme);
+    }
 });
-loadHistory();
+</script>
+
+</body>
+</html>
+
