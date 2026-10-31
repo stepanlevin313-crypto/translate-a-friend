@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Переводчик раскладки</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        p.subtitle {
+            color: #666;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: vertical;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+        textarea:focus {
+            border-color: #3182ce;
+            outline: none;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background-color: #2b6cb0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Переводчик раскладки (QWERTY ⇄ ЙЦУКЕН)</h1>
+    <p class="subtitle">Если ваш друг не поменял раскладку с английской на русскую — мы в помощь!</p>
+    <textarea id="input" placeholder="Вставьте сюда текст (например, ghbdtn...)"></textarea>
+    <textarea id="output" placeholder="Результат появится здесь..." readonly></textarea>
+    <button class="btn" onclick="copyText()">Копировать результат</button>
+</div>
+
+<script>
+const map = {
+    'q':'й', 'w':'ц', 'e':'у', 'r':'к', 't':'е', 'y':'н', 'u':'г', 'i':'ш', 'o':'щ', 'p':'з', '[':'х', ']':'ъ',
+    'a':'ф', 's':'ы', 'd':'в', 'f':'а', 'g':'п', 'h':'р', 'j':'о', 'k':'л', 'l':'д', ';':'ж', "'":'э',
+    'z':'я', 'x':'ч', 'c':'с', 'v':'м', 'b':'и', 'n':'т', 'm':'ь', ',':'б', '.':'ю', '/':'.',
+    'Q':'Й', 'W':'Ц', 'E':'У', 'R':'К', 'T':'Е', 'Y':'Н', 'U':'Г', 'I':'Ш', 'O':'Щ', 'P':'З', '{':'Х', '}':'Ъ',
+    'A':'Ф', 'S':'Ы', 'D':'В', 'F':'А', 'G':'П', 'H':'Р', 'J':'О', 'K':'Л', 'L':'Д', ':':'Ж', '"':'Э',
+    'Z':'Я', 'X':'Ч', 'C':'С', 'V':'М', 'B':'И', 'N':'Т', 'M':'Ь', '<':'Б', '>':'Ю', '?':','
+};
+
+const input = document.getElementById('input');
+const output = document.getElementById('output');
+
+input.addEventListener('input', () => {
+    let text = input.value;
+    let result = '';
+    for (let char of text) {
+        result += map[char] || char;
+    }
+    output.value = result;
+});
+
+function copyText() {
+    output.select();
+    document.execCommand('copy');
+    alert('Текст скопирован!');
+}
+</script>
+
+</body>
+</html>
