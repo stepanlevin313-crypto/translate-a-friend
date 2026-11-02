@@ -50,7 +50,7 @@
             --btn-hover: linear-gradient(135deg, #95a5a6, #7f8c8d);
         }
 
-        /* Новые неоновые и глубокие темы */
+        /* Фиолетовая тема */
         [data-theme="purple"] {
             --bg-color: #120e1a;
             --card-bg: #1f1a2e;
@@ -60,6 +60,50 @@
             --input-bg: #120e1a;
             --btn-bg: #805ad5;
             --btn-hover: #6b46c1;
+        }
+
+        /* Неоновая фиолетовая тема */
+        [data-theme="neon-purple"] {
+            --bg-color: #090014;
+            --card-bg: #160027;
+            --text-main: #fff1ff;
+            --text-sub: #d6a6ff;
+            --border-color: #8b2cff;
+            --input-bg: #0d0018;
+            --btn-bg: #a100ff;
+            --btn-hover: #d000ff;
+        }
+
+        [data-theme="neon-purple"] body {
+            background-image: radial-gradient(
+                circle at top,
+                rgba(138, 43, 226, 0.22),
+                transparent 55%
+            );
+        }
+
+        [data-theme="neon-purple"] .container {
+            border: 1px solid #8b2cff;
+            box-shadow:
+                0 0 12px rgba(161, 0, 255, 0.45),
+                0 0 35px rgba(161, 0, 255, 0.2);
+        }
+
+        [data-theme="neon-purple"] h1 {
+            text-shadow: 0 0 12px rgba(208, 0, 255, 0.8);
+        }
+
+        [data-theme="neon-purple"] textarea:focus {
+            border-color: #d000ff;
+            box-shadow: 0 0 12px rgba(208, 0, 255, 0.55);
+        }
+
+        [data-theme="neon-purple"] .btn {
+            box-shadow: 0 0 14px rgba(161, 0, 255, 0.55);
+        }
+
+        [data-theme="neon-purple"] .btn:hover {
+            box-shadow: 0 0 22px rgba(208, 0, 255, 0.8);
         }
 
         [data-theme="red"] {
@@ -106,18 +150,19 @@
             align-items: center;
             transition: all 0.3s ease;
         }
+
         .container {
             max-width: 600px;
             width: 100%;
             background: var(--card-bg);
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
             position: relative;
             transition: all 0.3s ease;
             box-sizing: border-box;
         }
-        
+
         /* Стили для выбора тем */
         .theme-select-container {
             position: absolute;
@@ -127,6 +172,7 @@
             align-items: center;
             gap: 5px;
         }
+
         .theme-select {
             padding: 5px 10px;
             border-radius: 6px;
@@ -137,19 +183,21 @@
             font-size: 14px;
             outline: none;
         }
-        
+
         h1 {
             text-align: center;
             font-size: 24px;
             margin-bottom: 5px;
             margin-top: 15px;
         }
+
         p.subtitle {
             color: var(--text-sub);
             text-align: center;
             font-size: 14px;
             margin-bottom: 25px;
         }
+
         textarea {
             width: 100%;
             height: 120px;
@@ -164,10 +212,12 @@
             margin-bottom: 15px;
             transition: all 0.3s ease;
         }
+
         textarea:focus {
             border-color: var(--btn-bg);
             outline: none;
         }
+
         .btn {
             display: block;
             width: 100%;
@@ -182,6 +232,7 @@
             transition: background 0.2s, opacity 0.2s;
             margin-bottom: 20px;
         }
+
         .btn:hover {
             background: var(--btn-hover);
             opacity: 0.9;
@@ -194,12 +245,14 @@
             padding-top: 15px;
             margin-top: 5px;
         }
+
         .clock-time {
             font-size: 28px;
             font-weight: bold;
             letter-spacing: 1px;
             color: var(--text-main);
         }
+
         .clock-date {
             font-size: 13px;
             color: var(--text-sub);
@@ -217,14 +270,16 @@
             <option value="gold">👑 Золотая</option>
             <option value="silver">🥈 Серебряная</option>
             <option value="purple">🔮 Фиолетовая</option>
+            <option value="neon-purple">💜 Неоновая фиолетовая</option>
             <option value="red">❤️ Красная</option>
             <option value="blue">💙 Синяя</option>
             <option value="orange">🍊 Оранжевая</option>
         </select>
     </div>
-    
+
     <h1>Переводчик раскладки (QWERTY ⇄ ЙЦУКЕН)</h1>
     <p class="subtitle">Если ваш friend не поменял раскладку с английской на русскую — мы в помощь!</p>
+
     <textarea id="input" placeholder="Вставьте сюда текст (например, ghbdtn...)"></textarea>
     <textarea id="output" placeholder="Результат появится здесь..." readonly></textarea>
     <button class="btn" onclick="copyText()">Копировать результат</button>
@@ -237,77 +292,81 @@
 </div>
 
 <script>
-const map = {
-    'q':'й', 'w':'ц', 'e':'у', 'r':'к', 't':'е', 'y':'н', 'u':'г', 'i':'ш', 'o':'щ', 'p':'з', '[':'х', ']':'ъ',
-    'a':'ф', 's':'ы', 'd':'в', 'f':'а', 'g':'п', 'h':'р', 'j':'о', 'k':'л', 'l':'д', ';':'ж', "'":'э',
-    'z':'я', 'x':'ч', 'c':'с', 'v':'м', 'b':'и', 'n':'т', 'm':'ь', ',':'б', '.':'ю', '/':'.',
-    'Q':'Й', 'W':'Ц', 'E':'У', 'R':'К', 'T':'Е', 'Y':'Н', 'U':'Г', 'I':'Ш', 'O':'Щ', 'P':'З', '{':'Х', '}':'Ъ',
-    'A':'Ф', 'S':'Ы', 'D':'В', 'F':'А', 'G':'П', 'H':'Р', 'J':'О', 'K':'Л', 'L':'Д', ':':'Ж', '"':'Э',
-    'Z':'Я', 'X':'Ч', 'C':'С', 'V':'М', 'B':'И', 'N':'Т', 'M':'Ь', '<':'Б', '>':'Ю', '?':','
-};
-
-const input = document.getElementById('input');
-const output = document.getElementById('output');
-const themeSelect = document.getElementById('themeSelect');
-
-// Логика перевода раскладки
-input.addEventListener('input', () => {
-    let text = input.value;
-    let result = '';
-    for (let char of text) {
-        result += map[char] || char;
-    }
-    output.value = result;
-});
-
-// Логика копирования
-function copyText() {
-    if (!output.value) return;
-    output.select();
-    document.execCommand('copy');
-    alert('Текст скопирован!');
-}
-
-// Логика переключения тем через выпадающее меню
-themeSelect.addEventListener('change', (e) => {
-    const selectedTheme = e.target.value;
-    if (selectedTheme === 'light') {
-        document.documentElement.removeAttribute('data-theme');
-    } else {
-        document.documentElement.setAttribute('data-theme', selectedTheme);
-    }
-});
-
-// Логика московских часов
-function updateMskClock() {
-    const clockTime = document.getElementById('clockTime');
-    const clockDate = document.getElementById('clockDate');
-    const now = new Date();
-
-    const timeString = now.toLocaleTimeString('ru-RU', {
-        timeZone: 'Europe/Moscow',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-    });
-    clockTime.textContent = timeString;
-
-    const dateOptions = { 
-        timeZone: 'Europe/Moscow', 
-        weekday: 'long', 
-        day: 'numeric', 
-        month: 'long' 
+    const map = {
+        'q': 'й', 'w': 'ц', 'e': 'у', 'r': 'к', 't': 'е', 'y': 'н', 'u': 'г', 'i': 'ш', 'o': 'щ', 'p': 'з', '[': 'х', ']': 'ъ',
+        'a': 'ф', 's': 'ы', 'd': 'в', 'f': 'а', 'g': 'п', 'h': 'р', 'j': 'о', 'k': 'л', 'l': 'д', ';': 'ж', "'": 'э',
+        'z': 'я', 'x': 'ч', 'c': 'с', 'v': 'м', 'b': 'и', 'n': 'т', 'm': 'ь', ',': 'б', '.': 'ю', '/': '.',
+        'Q': 'Й', 'W': 'Ц', 'E': 'У', 'R': 'К', 'T': 'Е', 'Y': 'Н', 'U': 'Г', 'I': 'Ш', 'O': 'Щ', 'P': 'З', '{': 'Х', '}': 'Ъ',
+        'A': 'Ф', 'S': 'Ы', 'D': 'В', 'F': 'А', 'G': 'П', 'H': 'Р', 'J': 'О', 'K': 'Л', 'L': 'Д', ':': 'Ж', '"': 'Э',
+        'Z': 'Я', 'X': 'Ч', 'C': 'С', 'V': 'М', 'B': 'И', 'N': 'Т', 'M': 'Ь', '<': 'Б', '>': 'Ю', '?': ','
     };
-    let dateString = now.toLocaleDateString('ru-RU', dateOptions);
-    
-    dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1) + ' (МСК)';
-    clockDate.textContent = dateString;
-}
 
-setInterval(updateMskClock, 1000);
-updateMskClock();
+    const input = document.getElementById('input');
+    const output = document.getElementById('output');
+    const themeSelect = document.getElementById('themeSelect');
+
+    // Логика перевода раскладки
+    input.addEventListener('input', () => {
+        let text = input.value;
+        let result = '';
+
+        for (let char of text) {
+            result += map[char] || char;
+        }
+
+        output.value = result;
+    });
+
+    // Логика копирования
+    function copyText() {
+        if (!output.value) return;
+
+        output.select();
+        document.execCommand('copy');
+        alert('Текст скопирован!');
+    }
+
+    // Логика переключения тем через выпадающее меню
+    themeSelect.addEventListener('change', (e) => {
+        const selectedTheme = e.target.value;
+
+        if (selectedTheme === 'light') {
+            document.documentElement.removeAttribute('data-theme');
+        } else {
+            document.documentElement.setAttribute('data-theme', selectedTheme);
+        }
+    });
+
+    // Логика московских часов
+    function updateMskClock() {
+        const clockTime = document.getElementById('clockTime');
+        const clockDate = document.getElementById('clockDate');
+        const now = new Date();
+
+        const timeString = now.toLocaleTimeString('ru-RU', {
+            timeZone: 'Europe/Moscow',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+
+        clockTime.textContent = timeString;
+
+        const dateOptions = {
+            timeZone: 'Europe/Moscow',
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long'
+        };
+
+        let dateString = now.toLocaleDateString('ru-RU', dateOptions);
+        dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1) + ' (МСК)';
+        clockDate.textContent = dateString;
+    }
+
+    setInterval(updateMskClock, 1000);
+    updateMskClock();
 </script>
 
 </body>
 </html>
-
