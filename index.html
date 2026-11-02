@@ -82,9 +82,8 @@
 
         [data-theme="neon-purple"] .container {
             border: 1px solid #8b2cff;
-            box-shadow:
-                0 0 12px rgba(161, 0, 255, 0.45),
-                0 0 35px rgba(161, 0, 255, 0.2);
+            box-shadow: 0 0 12px rgba(161, 0, 255, 0.45),
+                        0 0 35px rgba(161, 0, 255, 0.2);
         }
 
         [data-theme="neon-purple"] h1 {
@@ -137,20 +136,68 @@
             --btn-hover: #dd6b20;
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             transition: all 0.3s ease;
         }
 
+        .page-layout {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(180px, 1fr) minmax(320px, 600px) minmax(180px, 1fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .side-panel {
+            position: sticky;
+            top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+            text-align: center;
+        }
+
+        .side-panel h2 {
+            margin: 0 0 12px;
+            font-size: 17px;
+        }
+
+        .countdown {
+            font-size: clamp(22px, 3vw, 34px);
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: var(--btn-bg);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .side-note {
+            margin-top: 10px;
+            color: var(--text-sub);
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .side-message {
+            font-size: clamp(20px, 2.5vw, 30px);
+            font-weight: 900;
+            line-height: 1.2;
+            overflow-wrap: anywhere;
+        }
+
         .container {
-            max-width: 600px;
             width: 100%;
             background: var(--card-bg);
             padding: 30px;
@@ -158,7 +205,6 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
             position: relative;
             transition: all 0.3s ease;
-            box-sizing: border-box;
         }
 
         .theme-select-container {
@@ -189,7 +235,7 @@
             margin: 24px 0 12px;
         }
 
-        p.subtitle {
+        .subtitle {
             color: var(--text-sub);
             text-align: center;
             font-size: 14px;
@@ -206,7 +252,6 @@
             border-radius: 8px;
             font-size: 16px;
             resize: vertical;
-            box-sizing: border-box;
             margin-bottom: 15px;
             transition: all 0.3s ease;
         }
@@ -289,13 +334,44 @@
             margin-top: 3px;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 900px) {
+            .page-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .container {
+                grid-column: 1 / -1;
+                grid-row: 1;
+                max-width: 600px;
+                justify-self: center;
+            }
+
+            .side-panel {
+                position: static;
+            }
+        }
+
+        @media (max-width: 520px) {
             body {
                 padding: 10px;
             }
 
+            .page-layout {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
             .container {
+                grid-column: 1;
                 padding: 20px;
+            }
+
+            .left-panel {
+                grid-row: 2;
+            }
+
+            .right-panel {
+                grid-row: 3;
             }
 
             .translation-controls {
@@ -311,121 +387,116 @@
 </head>
 
 <body>
-<div class="container">
-    <div class="theme-select-container">
-        <select class="theme-select" id="themeSelect" aria-label="Выбрать тему">
-            <option value="light">☀️ Светлая</option>
-            <option value="dark">🌙 Тёмная</option>
-            <option value="gold">👑 Золотая</option>
-            <option value="silver">🥈 Серебряная</option>
-            <option value="purple">🔮 Фиолетовая</option>
-            <option value="neon-purple">💜 Неоновая фиолетовая</option>
-            <option value="red">❤️ Красная</option>
-            <option value="blue">💙 Синяя</option>
-            <option value="orange">🍊 Оранжевая</option>
-        </select>
-    </div>
+<div class="page-layout">
 
-    <h1>Переводчики</h1>
-    <p class="subtitle">
-        Перевод текста между языками и исправление неправильно выбранной раскладки
-    </p>
+    <!-- Левая боковая панель: таймер стока -->
+    <aside class="side-panel left-panel">
+        <h2>До обновления стока Blox Fruits</h2>
+        <div class="countdown" id="stockCountdown">00:00:00</div>
+        <div class="side-note">
+            Таймер считает до ближайшего обновления по циклу в 4 часа (UTC).
+        </div>
+    </aside>
 
-    <!-- Обычный переводчик -->
-    <h2 class="section-title">Обычный переводчик</h2>
+    <main class="container">
+        <div class="theme-select-container">
+            <select class="theme-select" id="themeSelect" aria-label="Выбрать тему">
+                <option value="light">☀️ Светлая</option>
+                <option value="dark">🌙 Тёмная</option>
+                <option value="gold">👑 Золотая</option>
+                <option value="silver">🥈 Серебряная</option>
+                <option value="purple">🔮 Фиолетовая</option>
+                <option value="neon-purple">💜 Неоновая фиолетовая</option>
+                <option value="red">❤️ Красная</option>
+                <option value="blue">💙 Синяя</option>
+                <option value="orange">🍊 Оранжевая</option>
+            </select>
+        </div>
 
-    <div class="translation-controls">
-        <select id="sourceLanguage" aria-label="Язык исходного текста">
-            <option value="ru" selected>Русский</option>
-            <option value="en">Английский</option>
-            <option value="zh-CN">Китайский</option>
-            <option value="de">Немецкий</option>
-            <option value="fr">Французский</option>
-            <option value="es">Испанский</option>
-            <option value="it">Итальянский</option>
-            <option value="ja">Японский</option>
-            <option value="ko">Корейский</option>
-            <option value="tr">Турецкий</option>
-        </select>
+        <h1>Переводчики</h1>
+        <p class="subtitle">
+            Перевод текста между языками и исправление неправильно выбранной раскладки
+        </p>
 
-        <button
-            type="button"
-            class="swap-btn"
-            id="swapLanguages"
-            aria-label="Поменять языки местами"
-            title="Поменять языки местами"
-        >⇄</button>
+        <h2 class="section-title">Обычный переводчик</h2>
 
-        <select id="targetLanguage" aria-label="Язык перевода">
-            <option value="ru">Русский</option>
-            <option value="en" selected>Английский</option>
-            <option value="zh-CN">Китайский</option>
-            <option value="de">Немецкий</option>
-            <option value="fr">Французский</option>
-            <option value="es">Испанский</option>
-            <option value="it">Итальянский</option>
-            <option value="ja">Японский</option>
-            <option value="ko">Корейский</option>
-            <option value="tr">Турецкий</option>
-        </select>
-    </div>
+        <div class="translation-controls">
+            <select id="sourceLanguage" aria-label="Язык исходного текста">
+                <option value="ru" selected>Русский</option>
+                <option value="en">Английский</option>
+                <option value="zh-CN">Китайский</option>
+                <option value="de">Немецкий</option>
+                <option value="fr">Французский</option>
+                <option value="es">Испанский</option>
+                <option value="it">Итальянский</option>
+                <option value="ja">Японский</option>
+                <option value="ko">Корейский</option>
+                <option value="tr">Турецкий</option>
+            </select>
 
-    <textarea
-        id="translateInput"
-        placeholder="Введите текст для перевода..."
-    ></textarea>
+            <button
+                type="button"
+                class="swap-btn"
+                id="swapLanguages"
+                aria-label="Поменять языки местами"
+                title="Поменять языки местами"
+            >⇄</button>
 
-    <button class="btn" id="translateButton" type="button">
-        Перевести
-    </button>
+            <select id="targetLanguage" aria-label="Язык перевода">
+                <option value="ru">Русский</option>
+                <option value="en" selected>Английский</option>
+                <option value="zh-CN">Китайский</option>
+                <option value="de">Немецкий</option>
+                <option value="fr">Французский</option>
+                <option value="es">Испанский</option>
+                <option value="it">Итальянский</option>
+                <option value="ja">Японский</option>
+                <option value="ko">Корейский</option>
+                <option value="tr">Турецкий</option>
+            </select>
+        </div>
 
-    <p class="translate-status" id="translateStatus" aria-live="polite"></p>
+        <textarea id="translateInput" placeholder="Введите текст для перевода..."></textarea>
+        <button class="btn" id="translateButton" type="button">Перевести</button>
+        <p class="translate-status" id="translateStatus" aria-live="polite"></p>
+        <textarea id="translateOutput" placeholder="Здесь появится перевод..." readonly></textarea>
 
-    <textarea
-        id="translateOutput"
-        placeholder="Здесь появится перевод..."
-        readonly
-    ></textarea>
+        <button class="btn" id="copyTranslationButton" type="button">
+            Копировать перевод
+        </button>
+        <button class="btn" id="speakTranslationButton" type="button">
+            🔊 Прослушать перевод
+        </button>
+        <button class="btn" id="stopSpeakingButton" type="button">
+            ⏹ Остановить озвучивание
+        </button>
 
-    <button class="btn" id="copyTranslationButton" type="button">
-        Копировать перевод
-    </button>
+        <h2 class="section-title">Переводчик раскладки (QWERTY → ЙЦУКЕН)</h2>
 
-    <button class="btn" id="speakTranslationButton" type="button">
-        🔊 Прослушать перевод
-    </button>
+        <textarea
+            id="input"
+            placeholder="Вставьте текст с неправильной раскладкой, например ghbdtn..."
+        ></textarea>
+        <textarea id="output" placeholder="Результат появится здесь..." readonly></textarea>
+        <button class="btn" id="copyLayoutButton" type="button">
+            Копировать результат
+        </button>
 
-    <button class="btn" id="stopSpeakingButton" type="button">
-        ⏹ Остановить озвучивание
-    </button>
+        <div class="clock-box">
+            <div class="clock-time" id="clockTime">00:00:00</div>
+            <div class="clock-date" id="clockDate">Время по МСК</div>
+        </div>
+    </main>
 
-    <!-- Переводчик раскладки -->
-    <h2 class="section-title">Переводчик раскладки (QWERTY → ЙЦУКЕН)</h2>
+    <!-- Правая боковая панель -->
+    <aside class="side-panel right-panel">
+        <div class="side-message">ВСЕ АНТОНЫ ЛОХИ</div>
+    </aside>
 
-    <textarea
-        id="input"
-        placeholder="Вставьте текст с неправильной раскладкой, например ghbdtn..."
-    ></textarea>
-
-    <textarea
-        id="output"
-        placeholder="Результат появится здесь..."
-        readonly
-    ></textarea>
-
-    <button class="btn" id="copyLayoutButton" type="button">
-        Копировать результат
-    </button>
-
-    <!-- Часы по Москве -->
-    <div class="clock-box">
-        <div class="clock-time" id="clockTime">00:00:00</div>
-        <div class="clock-date" id="clockDate">Время по МСК</div>
-    </div>
 </div>
 
 <script>
-    // Таблица соответствия английской и русской раскладок
+    // Перевод английских символов раскладки в русские
     const map = {
         'q': 'й', 'w': 'ц', 'e': 'у', 'r': 'к', 't': 'е', 'y': 'н',
         'u': 'г', 'i': 'ш', 'o': 'щ', 'p': 'з', '[': 'х', ']': 'ъ',
@@ -446,7 +517,6 @@
     const output = document.getElementById('output');
     const themeSelect = document.getElementById('themeSelect');
 
-    // Автоматический перевод раскладки при вводе
     input.addEventListener('input', () => {
         let result = '';
 
@@ -457,7 +527,6 @@
         output.value = result;
     });
 
-    // Копирование текста
     async function copyToClipboard(text) {
         if (!text) return false;
 
@@ -483,7 +552,7 @@
         }
     });
 
-    // Переключение цветовых тем
+    // Переключение темы
     themeSelect.addEventListener('change', (event) => {
         const selectedTheme = event.target.value;
 
@@ -494,7 +563,7 @@
         }
     });
 
-    // Элементы обычного переводчика
+    // Обычный онлайн-переводчик
     const translateInput = document.getElementById('translateInput');
     const translateOutput = document.getElementById('translateOutput');
     const sourceLanguage = document.getElementById('sourceLanguage');
@@ -502,7 +571,6 @@
     const translateButton = document.getElementById('translateButton');
     const translateStatus = document.getElementById('translateStatus');
 
-    // Перевод текста через онлайн-сервис
     translateButton.addEventListener('click', translateText);
 
     async function translateText() {
@@ -523,9 +591,7 @@
         translateStatus.textContent = 'Переводим…';
 
         try {
-            const langPair =
-                `${sourceLanguage.value}|${targetLanguage.value}`;
-
+            const langPair = `${sourceLanguage.value}|${targetLanguage.value}`;
             const url =
                 'https://api.mymemory.translated.net/get' +
                 `?q=${encodeURIComponent(text)}` +
@@ -553,8 +619,7 @@
             translateStatus.textContent = 'Перевод готов.';
         } catch (error) {
             translateStatus.textContent =
-                error.message ||
-                'Ошибка перевода. Проверьте подключение к интернету.';
+                error.message || 'Ошибка. Проверьте подключение к интернету.';
         } finally {
             translateButton.disabled = false;
         }
@@ -573,7 +638,7 @@
         translateStatus.textContent = '';
     });
 
-    // Копирование обычного перевода
+    // Копировать перевод
     document.getElementById('copyTranslationButton').addEventListener('click', async () => {
         if (!translateOutput.value) {
             translateStatus.textContent = 'Сначала переведите текст.';
@@ -606,12 +671,9 @@
             return;
         }
 
-        // Остановить предыдущую речь, если она ещё звучит
         window.speechSynthesis.cancel();
 
         const speech = new SpeechSynthesisUtterance(text);
-
-        // Язык озвучивания соответствует выбранному языку перевода
         speech.lang = targetLanguage.value;
 
         speech.onstart = () => {
@@ -624,13 +686,12 @@
 
         speech.onerror = () => {
             translateStatus.textContent =
-                'Не удалось озвучить текст. Возможно, для этого языка нет голоса.';
+                'Не удалось озвучить текст. Возможно, для языка нет голоса.';
         };
 
         window.speechSynthesis.speak(speech);
     });
 
-    // Остановка озвучивания
     document.getElementById('stopSpeakingButton').addEventListener('click', () => {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
@@ -638,18 +699,48 @@
         }
     });
 
+    // Таймер до ближайшей границы 4-часового цикла UTC
+    function updateStockCountdown() {
+        const countdownElement = document.getElementById('stockCountdown');
+        const now = new Date();
+        const utcHour = now.getUTCHours();
+
+        let hoursUntilNext = 4 - (utcHour % 4);
+        let nextUpdate = new Date(now);
+
+        nextUpdate.setUTCHours(utcHour + hoursUntilNext, 0, 0, 0);
+
+        let remainingMs = nextUpdate.getTime() - now.getTime();
+
+        if (remainingMs <= 0) {
+            remainingMs = 4 * 60 * 60 * 1000;
+        }
+
+        const totalSeconds = Math.floor(remainingMs / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        countdownElement.textContent =
+            `${String(hours).padStart(2, '0')}:` +
+            `${String(minutes).padStart(2, '0')}:` +
+            `${String(seconds).padStart(2, '0')}`;
+    }
+
+    setInterval(updateStockCountdown, 1000);
+    updateStockCountdown();
+
     // Часы по Москве
     function updateMskClock() {
-        const clockTime = document.getElementById('clockTime');
-        const clockDate = document.getElementById('clockDate');
         const now = new Date();
 
-        clockTime.textContent = now.toLocaleTimeString('ru-RU', {
-            timeZone: 'Europe/Moscow',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
+        document.getElementById('clockTime').textContent =
+            now.toLocaleTimeString('ru-RU', {
+                timeZone: 'Europe/Moscow',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
 
         let dateString = now.toLocaleDateString('ru-RU', {
             timeZone: 'Europe/Moscow',
@@ -663,7 +754,7 @@
             dateString.slice(1) +
             ' (МСК)';
 
-        clockDate.textContent = dateString;
+        document.getElementById('clockDate').textContent = dateString;
     }
 
     setInterval(updateMskClock, 1000);
