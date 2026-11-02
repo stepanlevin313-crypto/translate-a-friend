@@ -8,14 +8,13 @@
     <style>
         :root {
             --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
+            --card-bg: white;
             --text-main: #333333;
             --text-sub: #666666;
             --border-color: #e2e8f0;
-            --input-bg: #ffffff;
+            --input-bg: white;
             --btn-bg: #3182ce;
             --btn-hover: #2b6cb0;
-            --btn-text: #ffffff;
         }
 
         [data-theme="dark"] {
@@ -142,12 +141,12 @@
         }
 
         body {
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
             padding: 20px;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .page-layout {
@@ -205,7 +204,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
             position: relative;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .theme-select-container {
@@ -223,10 +222,6 @@
             color: var(--text-main);
             cursor: pointer;
             font-size: 14px;
-        }
-
-        .theme-select {
-            max-width: 220px;
         }
 
         h1 {
@@ -258,7 +253,7 @@
             font-size: 16px;
             resize: vertical;
             margin-bottom: 15px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         textarea:focus {
@@ -270,7 +265,7 @@
             display: block;
             width: 100%;
             background: var(--btn-bg);
-            color: var(--btn-text, #ffffff);
+            color: white;
             border: none;
             padding: 12px;
             font-size: 16px;
@@ -387,11 +382,6 @@
                 font-size: 13px;
                 padding: 8px 5px;
             }
-
-            .theme-select {
-                max-width: 170px;
-                font-size: 12px;
-            }
         }
     </style>
 </head>
@@ -399,6 +389,7 @@
 <body>
 <div class="page-layout">
 
+    <!-- Левая боковая панель: таймер стока -->
     <aside class="side-panel left-panel">
         <h2>До обновления стока Blox Fruits</h2>
         <div class="countdown" id="stockCountdown">00:00:00</div>
@@ -497,6 +488,7 @@
         </div>
     </main>
 
+    <!-- Правая боковая панель -->
     <aside class="side-panel right-panel">
         <div class="side-message">ВСЕ АНТОНЫ ЛОХИ</div>
     </aside>
@@ -504,230 +496,29 @@
 </div>
 
 <script>
-    // Оттенки для новых цветовых тем
-    const shadeGroups = [
-        {
-            label: "Красный",
-            shades: [
-                ["Алый", "#E53935"],
-                ["Бордовый", "#800020"],
-                ["Вишнёвый", "#D2042D"],
-                ["Малиновый", "#C2185B"],
-                ["Коралловый", "#FF6F61"],
-                ["Кирпичный", "#B7410E"],
-                ["Рубиновый", "#9B111E"]
-            ]
-        },
-        {
-            label: "Оранжевый",
-            shades: [
-                ["Мандариновый", "#F28500"],
-                ["Абрикосовый", "#FBCEB1"],
-                ["Персиковый", "#FFCBA4"],
-                ["Терракотовый", "#E2725B"],
-                ["Медный", "#B87333"],
-                ["Янтарный", "#FFBF00"]
-            ]
-        },
-        {
-            label: "Жёлтый",
-            shades: [
-                ["Лимонный", "#FFF44F"],
-                ["Золотой", "#D4AF37"],
-                ["Песочный", "#C2B280"],
-                ["Горчичный", "#D4A017"],
-                ["Ванильный", "#F3E5AB"],
-                ["Соломенный", "#E4D96F"]
-            ]
-        },
-        {
-            label: "Зелёный",
-            shades: [
-                ["Салатовый", "#7CFC00"],
-                ["Лаймовый", "#BFFF00"],
-                ["Мятный", "#98FF98"],
-                ["Оливковый", "#808000"],
-                ["Изумрудный", "#50C878"],
-                ["Хвойный", "#01796F"],
-                ["Болотный", "#556B2F"]
-            ]
-        },
-        {
-            label: "Голубой и синий",
-            shades: [
-                ["Небесный", "#87CEEB"],
-                ["Бирюзовый", "#40E0D0"],
-                ["Лазурный", "#007FFF"],
-                ["Аквамариновый", "#7FFFD4"],
-                ["Васильковый", "#6495ED"],
-                ["Индиго", "#4B0082"],
-                ["Кобальтовый", "#0047AB"],
-                ["Бирюзово-синий", "#0D98BA"]
-            ]
-        },
-        {
-            label: "Фиолетовый",
-            shades: [
-                ["Сиреневый", "#C8A2C8"],
-                ["Лавандовый", "#B57EDC"],
-                ["Лиловый", "#C8A2C8"],
-                ["Сливовый", "#8E4585"],
-                ["Баклажановый", "#614051"],
-                ["Аметистовый", "#9966CC"]
-            ]
-        },
-        {
-            label: "Розовый",
-            shades: [
-                ["Пудровый", "#E6B7B2"],
-                ["Нежно-розовый", "#FFB6C1"],
-                ["Фуксия", "#FF00FF"],
-                ["Розово-персиковый", "#F6C6A8"],
-                ["Пыльная роза", "#C08081"]
-            ]
-        },
-        {
-            label: "Коричневый",
-            shades: [
-                ["Бежевый", "#D8C3A5"],
-                ["Карамельный", "#C68E17"],
-                ["Кофейный", "#6F4E37"],
-                ["Шоколадный", "#7B3F00"],
-                ["Каштановый", "#954535"],
-                ["Ореховый", "#80613F"]
-            ]
-        },
-        {
-            label: "Белый и серый",
-            shades: [
-                ["Молочный", "#FFFDF0"],
-                ["Кремовый", "#FFFDD0"],
-                ["Жемчужный", "#EAE0C8"],
-                ["Серебристый", "#C0C0C0"],
-                ["Дымчатый", "#708090"],
-                ["Графитовый", "#41424C"],
-                ["Антрацитовый", "#293133"]
-            ]
-        },
-        {
-            label: "Чёрный",
-            shades: [
-                ["Угольный", "#36454F"],
-                ["Иссиня-чёрный", "#0A0A23"],
-                ["Графитово-чёрный", "#1C1C1C"]
-            ]
-        }
-    ];
-
-    const themeSelect = document.getElementById("themeSelect");
-    const root = document.documentElement;
-
-    // Добавляем оттенки в выпадающий список группами
-    shadeGroups.forEach((group, groupIndex) => {
-        const optgroup = document.createElement("optgroup");
-        optgroup.label = group.label;
-
-        group.shades.forEach(([name, color], shadeIndex) => {
-            const option = document.createElement("option");
-            option.value = `shade-${groupIndex}-${shadeIndex}`;
-            option.textContent = name;
-            option.dataset.color = color;
-            optgroup.appendChild(option);
-        });
-
-        themeSelect.appendChild(optgroup);
-    });
-
-    function hexToRgb(hex) {
-        const cleanHex = hex.replace("#", "");
-        return {
-            r: parseInt(cleanHex.substring(0, 2), 16),
-            g: parseInt(cleanHex.substring(2, 4), 16),
-            b: parseInt(cleanHex.substring(4, 6), 16)
-        };
-    }
-
-    function getReadableTextColor(hex) {
-        const { r, g, b } = hexToRgb(hex);
-
-        // Определяем яркость оттенка, чтобы текст на кнопке оставался читаемым
-        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-        return brightness > 155 ? "#222222" : "#ffffff";
-    }
-
-    function clearCustomThemeStyles() {
-        [
-            "--bg-color",
-            "--card-bg",
-            "--text-main",
-            "--text-sub",
-            "--border-color",
-            "--input-bg",
-            "--btn-bg",
-            "--btn-hover",
-            "--btn-text"
-        ].forEach(property => root.style.removeProperty(property));
-    }
-
-    function applyShadeTheme(color) {
-        const { r, g, b } = hexToRgb(color);
-
-        root.setAttribute("data-theme", "shade");
-        root.style.setProperty("--bg-color", "#11151d");
-        root.style.setProperty("--card-bg", "#1c2330");
-        root.style.setProperty("--text-main", "#f7fafc");
-        root.style.setProperty("--text-sub", "#b8c2d1");
-        root.style.setProperty("--input-bg", "#11151d");
-        root.style.setProperty(
-            "--border-color",
-            `rgba(${r}, ${g}, ${b}, 0.65)`
-        );
-        root.style.setProperty("--btn-bg", color);
-        root.style.setProperty(
-            "--btn-hover",
-            `rgb(${Math.round(r * 0.82)}, ${Math.round(g * 0.82)}, ${Math.round(b * 0.82)})`
-        );
-        root.style.setProperty("--btn-text", getReadableTextColor(color));
-    }
-
-    // Переключение тем
-    themeSelect.addEventListener("change", event => {
-        const selectedOption = event.target.selectedOptions[0];
-        const selectedTheme = event.target.value;
-
-        clearCustomThemeStyles();
-
-        if (selectedTheme === "light") {
-            root.removeAttribute("data-theme");
-        } else if (selectedTheme.startsWith("shade-")) {
-            applyShadeTheme(selectedOption.dataset.color);
-        } else {
-            root.setAttribute("data-theme", selectedTheme);
-        }
-    });
-
     // Перевод английских символов раскладки в русские
     const map = {
-        "q": "й", "w": "ц", "e": "у", "r": "к", "t": "е", "y": "н",
-        "u": "г", "i": "ш", "o": "щ", "p": "з", "[": "х", "]": "ъ",
-        "a": "ф", "s": "ы", "d": "в", "f": "а", "g": "п", "h": "р",
-        "j": "о", "k": "л", "l": "д", ";": "ж", "'": "э",
-        "z": "я", "x": "ч", "c": "с", "v": "м", "b": "и", "n": "т",
-        "m": "ь", ",": "б", ".": "ю", "/": ".",
+        'q': 'й', 'w': 'ц', 'e': 'у', 'r': 'к', 't': 'е', 'y': 'н',
+        'u': 'г', 'i': 'ш', 'o': 'щ', 'p': 'з', '[': 'х', ']': 'ъ',
+        'a': 'ф', 's': 'ы', 'd': 'в', 'f': 'а', 'g': 'п', 'h': 'р',
+        'j': 'о', 'k': 'л', 'l': 'д', ';': 'ж', "'": 'э',
+        'z': 'я', 'x': 'ч', 'c': 'с', 'v': 'м', 'b': 'и', 'n': 'т',
+        'm': 'ь', ',': 'б', '.': 'ю', '/': '.',
 
-        "Q": "Й", "W": "Ц", "E": "У", "R": "К", "T": "Е", "Y": "Н",
-        "U": "Г", "I": "Ш", "O": "Щ", "P": "З", "{": "Х", "}": "Ъ",
-        "A": "Ф", "S": "Ы", "D": "В", "F": "А", "G": "П", "H": "Р",
-        "J": "О", "K": "Л", "L": "Д", ":": "Ж", "\"": "Э",
-        "Z": "Я", "X": "Ч", "C": "С", "V": "М", "B": "И", "N": "Т",
-        "M": "Ь", "<": "Б", ">": "Ю", "?": ","
+        'Q': 'Й', 'W': 'Ц', 'E': 'У', 'R': 'К', 'T': 'Е', 'Y': 'Н',
+        'U': 'Г', 'I': 'Ш', 'O': 'Щ', 'P': 'З', '{': 'Х', '}': 'Ъ',
+        'A': 'Ф', 'S': 'Ы', 'D': 'В', 'F': 'А', 'G': 'П', 'H': 'Р',
+        'J': 'О', 'K': 'Л', 'L': 'Д', ':': 'Ж', '"': 'Э',
+        'Z': 'Я', 'X': 'Ч', 'C': 'С', 'V': 'М', 'B': 'И', 'N': 'Т',
+        'M': 'Ь', '<': 'Б', '>': 'Ю', '?': ','
     };
 
-    const input = document.getElementById("input");
-    const output = document.getElementById("output");
+    const input = document.getElementById('input');
+    const output = document.getElementById('output');
+    const themeSelect = document.getElementById('themeSelect');
 
-    input.addEventListener("input", () => {
-        let result = "";
+    input.addEventListener('input', () => {
+        let result = '';
 
         for (const char of input.value) {
             result += map[char] || char;
@@ -747,58 +538,69 @@
         }
     }
 
-    document.getElementById("copyLayoutButton").addEventListener("click", async () => {
+    document.getElementById('copyLayoutButton').addEventListener('click', async () => {
         if (!output.value) return;
 
         const copied = await copyToClipboard(output.value);
 
         if (copied) {
-            alert("Текст скопирован!");
+            alert('Текст скопирован!');
         } else {
             output.select();
-            document.execCommand("copy");
-            alert("Текст скопирован!");
+            document.execCommand('copy');
+            alert('Текст скопирован!');
+        }
+    });
+
+    // Переключение темы
+    themeSelect.addEventListener('change', (event) => {
+        const selectedTheme = event.target.value;
+
+        if (selectedTheme === 'light') {
+            document.documentElement.removeAttribute('data-theme');
+        } else {
+            document.documentElement.setAttribute('data-theme', selectedTheme);
         }
     });
 
     // Обычный онлайн-переводчик
-    const translateInput = document.getElementById("translateInput");
-    const translateOutput = document.getElementById("translateOutput");
-    const sourceLanguage = document.getElementById("sourceLanguage");
-    const targetLanguage = document.getElementById("targetLanguage");
-    const translateButton = document.getElementById("translateButton");
-    const translateStatus = document.getElementById("translateStatus");
+    const translateInput = document.getElementById('translateInput');
+    const translateOutput = document.getElementById('translateOutput');
+    const sourceLanguage = document.getElementById('sourceLanguage');
+    const targetLanguage = document.getElementById('targetLanguage');
+    const translateButton = document.getElementById('translateButton');
+    const translateStatus = document.getElementById('translateStatus');
 
-    translateButton.addEventListener("click", translateText);
+    translateButton.addEventListener('click', translateText);
 
     async function translateText() {
         const text = translateInput.value.trim();
 
         if (!text) {
-            translateStatus.textContent = "Сначала введите текст для перевода.";
+            translateStatus.textContent = 'Сначала введите текст для перевода.';
             return;
         }
 
         if (sourceLanguage.value === targetLanguage.value) {
             translateOutput.value = text;
-            translateStatus.textContent = "Выбраны одинаковые языки.";
+            translateStatus.textContent = 'Выбраны одинаковые языки.';
             return;
         }
 
         translateButton.disabled = true;
-        translateStatus.textContent = "Переводим…";
+        translateStatus.textContent = 'Переводим…';
 
         try {
             const langPair = `${sourceLanguage.value}|${targetLanguage.value}`;
             const url =
-                "https://api.mymemory.translated.net/get" +
+                'https://api.mymemory.translated.net/get' +
                 `?q=${encodeURIComponent(text)}` +
                 `&langpair=${encodeURIComponent(langPair)}`;
 
             const response = await fetch(url);
 
             if (!response.ok) {
-                throw new Error("Сервис перевода временно недоступен.");
+                throw new Error('Сервис перевода временно недоступен.');
             }
 
             const data = await response.json();
@@ -809,22 +611,22 @@
                 !data.responseData.translatedText
             ) {
                 throw new Error(
-                    data.responseDetails || "Не удалось перевести текст."
+                    data.responseDetails || 'Не удалось перевести текст.'
                 );
             }
 
             translateOutput.value = data.responseData.translatedText;
-            translateStatus.textContent = "Перевод готов.";
+            translateStatus.textContent = 'Перевод готов.';
         } catch (error) {
             translateStatus.textContent =
-                error.message || "Ошибка. Проверьте подключение к интернету.";
+                error.message || 'Ошибка. Проверьте подключение к интернету.';
         } finally {
             translateButton.disabled = false;
         }
     }
 
     // Поменять языки и тексты местами
-    document.getElementById("swapLanguages").addEventListener("click", () => {
+    document.getElementById('swapLanguages').addEventListener('click', () => {
         const oldSourceLanguage = sourceLanguage.value;
         sourceLanguage.value = targetLanguage.value;
         targetLanguage.value = oldSourceLanguage;
@@ -833,39 +635,39 @@
         translateInput.value = translateOutput.value;
         translateOutput.value = oldText;
 
-        translateStatus.textContent = "";
+        translateStatus.textContent = '';
     });
 
     // Копировать перевод
-    document.getElementById("copyTranslationButton").addEventListener("click", async () => {
+    document.getElementById('copyTranslationButton').addEventListener('click', async () => {
         if (!translateOutput.value) {
-            translateStatus.textContent = "Сначала переведите текст.";
+            translateStatus.textContent = 'Сначала переведите текст.';
             return;
         }
 
         const copied = await copyToClipboard(translateOutput.value);
 
         if (copied) {
-            translateStatus.textContent = "Перевод скопирован.";
+            translateStatus.textContent = 'Перевод скопирован.';
         } else {
             translateOutput.select();
-            document.execCommand("copy");
-            translateStatus.textContent = "Перевод скопирован.";
+            document.execCommand('copy');
+            translateStatus.textContent = 'Перевод скопирован.';
         }
     });
 
     // Озвучивание перевода
-    document.getElementById("speakTranslationButton").addEventListener("click", () => {
+    document.getElementById('speakTranslationButton').addEventListener('click', () => {
         const text = translateOutput.value.trim();
 
         if (!text) {
-            translateStatus.textContent = "Сначала переведите текст.";
+            translateStatus.textContent = 'Сначала переведите текст.';
             return;
         }
 
-        if (!("speechSynthesis" in window)) {
+        if (!('speechSynthesis' in window)) {
             translateStatus.textContent =
-                "Озвучивание не поддерживается этим браузером.";
+                'Озвучивание не поддерживается этим браузером.';
             return;
         }
 
@@ -875,36 +677,36 @@
         speech.lang = targetLanguage.value;
 
         speech.onstart = () => {
-            translateStatus.textContent = "Озвучиваем перевод…";
+            translateStatus.textContent = 'Озвучиваем перевод…';
         };
 
         speech.onend = () => {
-            translateStatus.textContent = "Озвучивание завершено.";
+            translateStatus.textContent = 'Озвучивание завершено.';
         };
 
         speech.onerror = () => {
             translateStatus.textContent =
-                "Не удалось озвучить текст. Возможно, для языка нет голоса.";
+                'Не удалось озвучить текст. Возможно, для языка нет голоса.';
         };
 
         window.speechSynthesis.speak(speech);
     });
 
-    document.getElementById("stopSpeakingButton").addEventListener("click", () => {
-        if ("speechSynthesis" in window) {
+    document.getElementById('stopSpeakingButton').addEventListener('click', () => {
+        if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
-            translateStatus.textContent = "Озвучивание остановлено.";
+            translateStatus.textContent = 'Озвучивание остановлено.';
         }
     });
 
     // Таймер до ближайшей границы 4-часового цикла UTC
     function updateStockCountdown() {
-        const countdownElement = document.getElementById("stockCountdown");
+        const countdownElement = document.getElementById('stockCountdown');
         const now = new Date();
         const utcHour = now.getUTCHours();
 
-        const hoursUntilNext = 4 - (utcHour % 4);
-        const nextUpdate = new Date(now);
+        let hoursUntilNext = 4 - (utcHour % 4);
+        let nextUpdate = new Date(now);
 
         nextUpdate.setUTCHours(utcHour + hoursUntilNext, 0, 0, 0);
 
@@ -920,9 +722,9 @@
         const seconds = totalSeconds % 60;
 
         countdownElement.textContent =
-            `${String(hours).padStart(2, "0")}:` +
-            `${String(minutes).padStart(2, "0")}:` +
-            `${String(seconds).padStart(2, "0")}`;
+            `${String(hours).padStart(2, '0')}:` +
+            `${String(minutes).padStart(2, '0')}:` +
+            `${String(seconds).padStart(2, '0')}`;
     }
 
     setInterval(updateStockCountdown, 1000);
@@ -932,27 +734,27 @@
     function updateMskClock() {
         const now = new Date();
 
-        document.getElementById("clockTime").textContent =
-            now.toLocaleTimeString("ru-RU", {
-                timeZone: "Europe/Moscow",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit"
+        document.getElementById('clockTime').textContent =
+            now.toLocaleTimeString('ru-RU', {
+                timeZone: 'Europe/Moscow',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
             });
 
-        let dateString = now.toLocaleDateString("ru-RU", {
-            timeZone: "Europe/Moscow",
-            weekday: "long",
-            day: "numeric",
-            month: "long"
+        let dateString = now.toLocaleDateString('ru-RU', {
+            timeZone: 'Europe/Moscow',
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long'
         });
 
         dateString =
             dateString.charAt(0).toUpperCase() +
             dateString.slice(1) +
-            " (МСК)";
+            ' (МСК)';
 
-        document.getElementById("clockDate").textContent = dateString;
+        document.getElementById('clockDate').textContent = dateString;
     }
 
     setInterval(updateMskClock, 1000);
