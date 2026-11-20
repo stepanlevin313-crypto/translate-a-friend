@@ -4,761 +4,467 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Переводчики</title>
-
     <style>
         :root {
-            --bg-color: #f4f7f6;
-            --card-bg: white;
-            --text-main: #333333;
-            --text-sub: #666666;
-            --border-color: #e2e8f0;
-            --input-bg: white;
-            --btn-bg: #3182ce;
-            --btn-hover: #2b6cb0;
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --card: #f5f5f5;
+            --border: #ddd;
+            --accent: #4a90d9;
+            --btn-text: #ffffff;
+        }
+        body.dark {
+            --bg: #1a1a1a;
+            --text: #f0f0f0;
+            --card: #2d2d2d;
+            --border: #444;
+            --accent: #4a90d9;
+        }
+        body.gold {
+            --bg: #fffbe6;
+            --text: #5a4a00;
+            --card: #fff3b0;
+            --border: #d4af37;
+            --accent: #d4af37;
+        }
+        body.silver {
+            --bg: #f0f0f0;
+            --text: #333;
+            --card: #e8e8e8;
+            --border: #aaa;
+            --accent: #888;
+        }
+        body.purple {
+            --bg: #f3e8ff;
+            --text: #3b0764;
+            --card: #e9d5ff;
+            --border: #a855f7;
+            --accent: #a855f7;
+        }
+        body.neon-purple {
+            --bg: #0d001a;
+            --text: #e9d5ff;
+            --card: #1a0033;
+            --border: #a855f7;
+            --accent: #c084fc;
+        }
+        body.red {
+            --bg: #fff0f0;
+            --text: #7f1d1d;
+            --card: #fecaca;
+            --border: #ef4444;
+            --accent: #ef4444;
+        }
+        body.blue {
+            --bg: #eff6ff;
+            --text: #1e3a8a;
+            --card: #bfdbfe;
+            --border: #3b82f6;
+            --accent: #3b82f6;
+        }
+        body.orange {
+            --bg: #fff7ed;
+            --text: #7c2d12;
+            --card: #fed7aa;
+            --border: #f97316;
+            --accent: #f97316;
         }
 
-        [data-theme="dark"] {
-            --bg-color: #1a202c;
-            --card-bg: #2d3748;
-            --text-main: #f7fafc;
-            --text-sub: #a0aec0;
-            --border-color: #4a5568;
-            --input-bg: #1a202c;
-            --btn-bg: #4299e1;
-            --btn-hover: #3182ce;
-        }
-
-        [data-theme="gold"] {
-            --bg-color: #1c1912;
-            --card-bg: #2d2613;
-            --text-main: #f7e7c4;
-            --text-sub: #cfa861;
-            --border-color: #8c6f2d;
-            --input-bg: #1c1912;
-            --btn-bg: linear-gradient(135deg, #d4af37, #aa7c11);
-            --btn-hover: linear-gradient(135deg, #aa7c11, #8c6f2d);
-        }
-
-        [data-theme="silver"] {
-            --bg-color: #1e2229;
-            --card-bg: #2d323b;
-            --text-main: #e2e8f0;
-            --text-sub: #94a3b8;
-            --border-color: #64748b;
-            --input-bg: #1e2229;
-            --btn-bg: linear-gradient(135deg, #bdc3c7, #2c3e50);
-            --btn-hover: linear-gradient(135deg, #95a5a6, #7f8c8d);
-        }
-
-        [data-theme="purple"] {
-            --bg-color: #120e1a;
-            --card-bg: #1f1a2e;
-            --text-main: #f3ebff;
-            --text-sub: #b794f4;
-            --border-color: #553c9a;
-            --input-bg: #120e1a;
-            --btn-bg: #805ad5;
-            --btn-hover: #6b46c1;
-        }
-
-        [data-theme="neon-purple"] {
-            --bg-color: #090014;
-            --card-bg: #160027;
-            --text-main: #fff1ff;
-            --text-sub: #d6a6ff;
-            --border-color: #8b2cff;
-            --input-bg: #0d0018;
-            --btn-bg: #a100ff;
-            --btn-hover: #d000ff;
-        }
-
-        [data-theme="neon-purple"] body {
-            background-image: radial-gradient(
-                circle at top,
-                rgba(138, 43, 226, 0.22),
-                transparent 55%
-            );
-        }
-
-        [data-theme="neon-purple"] .container {
-            border: 1px solid #8b2cff;
-            box-shadow: 0 0 12px rgba(161, 0, 255, 0.45),
-                        0 0 35px rgba(161, 0, 255, 0.2);
-        }
-
-        [data-theme="neon-purple"] h1 {
-            text-shadow: 0 0 12px rgba(208, 0, 255, 0.8);
-        }
-
-        [data-theme="neon-purple"] textarea:focus {
-            border-color: #d000ff;
-            box-shadow: 0 0 12px rgba(208, 0, 255, 0.55);
-        }
-
-        [data-theme="neon-purple"] .btn {
-            box-shadow: 0 0 14px rgba(161, 0, 255, 0.55);
-        }
-
-        [data-theme="neon-purple"] .btn:hover {
-            box-shadow: 0 0 22px rgba(208, 0, 255, 0.8);
-        }
-
-        [data-theme="red"] {
-            --bg-color: #1f0b0b;
-            --card-bg: #361414;
-            --text-main: #ffebeb;
-            --text-sub: #feb2b2;
-            --border-color: #9b2c2c;
-            --input-bg: #1f0b0b;
-            --btn-bg: #e53e3e;
-            --btn-hover: #c53030;
-        }
-
-        [data-theme="blue"] {
-            --bg-color: #0b132b;
-            --card-bg: #1c2541;
-            --text-main: #edf2f7;
-            --text-sub: #64dfdf;
-            --border-color: #3a506b;
-            --input-bg: #0b132b;
-            --btn-bg: #00b4d8;
-            --btn-hover: #0077b6;
-        }
-
-        [data-theme="orange"] {
-            --bg-color: #1f140a;
-            --card-bg: #332212;
-            --text-main: #fff5eb;
-            --text-sub: #fbd38d;
-            --border-color: #dd6b20;
-            --input-bg: #1f140a;
-            --btn-bg: #ed8936;
-            --btn-hover: #dd6b20;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             transition: all 0.3s ease;
-        }
-
-        .page-layout {
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: minmax(180px, 1fr) minmax(320px, 600px) minmax(180px, 1fr);
-            gap: 20px;
-            align-items: start;
-        }
-
-        .side-panel {
-            position: sticky;
-            top: 20px;
+            min-height: 100vh;
             padding: 20px;
-            border-radius: 12px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
-            text-align: center;
         }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 10px; font-size: 2rem; }
+        .subtitle { text-align: center; opacity: 0.7; margin-bottom: 30px; }
 
-        .side-panel h2 {
-            margin: 0 0 12px;
-            font-size: 17px;
+        .theme-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 30px;
         }
-
-        .countdown {
-            font-size: clamp(22px, 3vw, 34px);
-            font-weight: bold;
-            letter-spacing: 1px;
-            color: var(--btn-bg);
-            font-variant-numeric: tabular-nums;
-        }
-
-        .side-note {
-            margin-top: 10px;
-            color: var(--text-sub);
-            font-size: 12px;
-            line-height: 1.4;
-        }
-
-        .side-message {
-            font-size: clamp(20px, 2.5vw, 30px);
-            font-weight: 900;
-            line-height: 1.2;
-            overflow-wrap: anywhere;
-        }
-
-        .container {
-            width: 100%;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .theme-select-container {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-        }
-
-        .theme-select,
-        .translation-controls select {
-            padding: 8px 10px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            background-color: var(--input-bg);
-            color: var(--text-main);
+        .theme-btn {
+            padding: 8px 14px;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            background: var(--card);
+            color: var(--text);
             cursor: pointer;
             font-size: 14px;
+            transition: all 0.2s;
         }
+        .theme-btn:hover { transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            margin: 40px 0 5px;
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
+        .card h2 { margin-bottom: 15px; font-size: 1.3rem; }
 
-        h2.section-title {
-            font-size: 18px;
-            margin: 24px 0 12px;
+        .lang-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
         }
-
-        .subtitle {
-            color: var(--text-sub);
-            text-align: center;
+        select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
             font-size: 14px;
-            margin-bottom: 25px;
+            flex: 1;
+            min-width: 120px;
         }
+        .swap-btn {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .swap-btn:hover { background: var(--accent); color: var(--btn-text); }
 
         textarea {
             width: 100%;
-            height: 120px;
+            min-height: 100px;
             padding: 12px;
-            border: 2px solid var(--border-color);
-            background-color: var(--input-bg);
-            color: var(--text-main);
             border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
             font-size: 16px;
             resize: vertical;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
+            margin-bottom: 10px;
+            font-family: inherit;
         }
+        textarea:focus { outline: 2px solid var(--accent); }
 
-        textarea:focus {
-            border-color: var(--btn-bg);
-            outline: none;
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            background: var(--btn-bg);
-            color: white;
-            border: none;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s, opacity 0.2s;
-            margin-bottom: 12px;
-        }
-
-        .btn:hover {
-            background: var(--btn-hover);
-            opacity: 0.9;
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: wait;
-        }
-
-        .translation-controls {
+        .btn-row {
             display: flex;
             gap: 10px;
-            margin-bottom: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
         }
-
-        .translation-controls select {
-            flex: 1;
-            min-width: 0;
-            font-size: 15px;
-        }
-
-        .swap-btn {
-            padding: 8px 14px;
-            border: 1px solid var(--border-color);
+        .btn {
+            padding: 10px 20px;
+            border: none;
             border-radius: 8px;
-            background: var(--input-bg);
-            color: var(--text-main);
-            font-size: 20px;
+            background: var(--accent);
+            color: var(--btn-text);
             cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
         }
 
-        .translate-status {
-            min-height: 20px;
-            margin: -5px 0 12px;
-            color: var(--text-sub);
-            font-size: 13px;
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
         }
+        .status.error { background: #fee2e2; color: #991b1b; display: block; }
+        .status.success { background: #dcfce7; color: #166534; display: block; }
+        .status.loading { background: #e0f2fe; color: #075985; display: block; }
 
-        .clock-box {
+        .char-count { font-size: 12px; opacity: 0.6; text-align: right; margin-bottom: 5px; }
+
+        .history {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .history-item {
+            padding: 8px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+        .history-item small { opacity: 0.6; }
+
+        .footer {
             text-align: center;
-            border-top: 1px solid var(--border-color);
-            padding-top: 15px;
-            margin-top: 5px;
+            opacity: 0.6;
+            font-size: 14px;
+            margin-top: 40px;
         }
+        .clock { font-weight: bold; }
 
-        .clock-time {
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        .clock-date {
-            font-size: 13px;
-            color: var(--text-sub);
-            margin-top: 3px;
-        }
-
-        @media (max-width: 900px) {
-            .page-layout {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .container {
-                grid-column: 1 / -1;
-                grid-row: 1;
-                max-width: 600px;
-                justify-self: center;
-            }
-
-            .side-panel {
-                position: static;
-            }
-        }
-
-        @media (max-width: 520px) {
-            body {
-                padding: 10px;
-            }
-
-            .page-layout {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .container {
-                grid-column: 1;
-                padding: 20px;
-            }
-
-            .left-panel {
-                grid-row: 2;
-            }
-
-            .right-panel {
-                grid-row: 3;
-            }
-
-            .translation-controls {
-                gap: 6px;
-            }
-
-            .translation-controls select {
-                font-size: 13px;
-                padding: 8px 5px;
-            }
+        @media (max-width: 600px) {
+            .lang-row { flex-direction: column; }
+            select { width: 100%; }
+            .btn { width: 100%; }
         }
     </style>
 </head>
-
 <body>
-<div class="page-layout">
+    <div class="container">
+        <h1>🌐 Переводчики</h1>
+        <p class="subtitle">Перевод текста между языками и исправление неправильно выбранной раскладки</p>
 
-    <!-- Левая боковая панель: таймер стока -->
-    <aside class="side-panel left-panel">
-        <h2>До обновления стока Blox Fruits</h2>
-        <div class="countdown" id="stockCountdown">00:00:00</div>
-        <div class="side-note">
-            Таймер считает до ближайшего обновления по циклу в 4 часа (UTC).
-        </div>
-    </aside>
-
-    <main class="container">
-        <div class="theme-select-container">
-            <select class="theme-select" id="themeSelect" aria-label="Выбрать тему">
-                <option value="light">☀️ Светлая</option>
-                <option value="dark">🌙 Тёмная</option>
-                <option value="gold">👑 Золотая</option>
-                <option value="silver">🥈 Серебряная</option>
-                <option value="purple">🔮 Фиолетовая</option>
-                <option value="neon-purple">💜 Неоновая фиолетовая</option>
-                <option value="red">❤️ Красная</option>
-                <option value="blue">💙 Синяя</option>
-                <option value="orange">🍊 Оранжевая</option>
-            </select>
+        <!-- Темы -->
+        <div class="theme-bar">
+            <button class="theme-btn" onclick="setTheme('light')">☀️ Светлая</button>
+            <button class="theme-btn" onclick="setTheme('dark')">🌙 Тёмная</button>
+            <button class="theme-btn" onclick="setTheme('gold')">👑 Золотая</button>
+            <button class="theme-btn" onclick="setTheme('silver')">🥈 Серебряная</button>
+            <button class="theme-btn" onclick="setTheme('purple')">🔮 Фиолетовая</button>
+            <button class="theme-btn" onclick="setTheme('neon-purple')">💜 Неоновая фиолетовая</button>
+            <button class="theme-btn" onclick="setTheme('red')">❤️ Красная</button>
+            <button class="theme-btn" onclick="setTheme('blue')">💙 Синяя</button>
+            <button class="theme-btn" onclick="setTheme('orange')">🍊 Оранжевая</button>
         </div>
 
-        <h1>Переводчики</h1>
-        <p class="subtitle">
-            Перевод текста между языками и исправление неправильно выбранной раскладки
-        </p>
+        <!-- Обычный переводчик -->
+        <div class="card">
+            <h2>📝 Обычный переводчик</h2>
+            <div class="lang-row">
+                <select id="fromLang">
+                    <option value="ru">Русский</option>
+                    <option value="en" selected>Английский</option>
+                    <option value="zh">Китайский</option>
+                    <option value="de">Немецкий</option>
+                    <option value="fr">Французский</option>
+                    <option value="es">Испанский</option>
+                    <option value="it">Итальянский</option>
+                    <option value="ja">Японский</option>
+                    <option value="ko">Корейский</option>
+                    <option value="tr">Турецкий</option>
+                </select>
+                <button class="swap-btn" onclick="swapLanguages()" title="Поменять языки">⇄</button>
+                <select id="toLang">
+                    <option value="ru" selected>Русский</option>
+                    <option value="en">Английский</option>
+                    <option value="zh">Китайский</option>
+                    <option value="de">Немецкий</option>
+                    <option value="fr">Французский</option>
+                    <option value="es">Испанский</option>
+                    <option value="it">Итальянский</option>
+                    <option value="ja">Японский</option>
+                    <option value="ko">Корейский</option>
+                    <option value="tr">Турецкий</option>
+                </select>
+            </div>
 
-        <h2 class="section-title">Обычный переводчик</h2>
+            <div class="char-count" id="charCount">0 / 500 символов</div>
+            <textarea id="inputText" placeholder="Введите текст для перевода..." maxlength="500"></textarea>
+            <textarea id="outputText" placeholder="Перевод появится здесь..." readonly></textarea>
 
-        <div class="translation-controls">
-            <select id="sourceLanguage" aria-label="Язык исходного текста">
-                <option value="ru" selected>Русский</option>
-                <option value="en">Английский</option>
-                <option value="zh-CN">Китайский</option>
-                <option value="de">Немецкий</option>
-                <option value="fr">Французский</option>
-                <option value="es">Испанский</option>
-                <option value="it">Итальянский</option>
-                <option value="ja">Японский</option>
-                <option value="ko">Корейский</option>
-                <option value="tr">Турецкий</option>
-            </select>
+            <div class="btn-row">
+                <button class="btn" onclick="translateText()">🔄 Перевести</button>
+                <button class="btn btn-secondary" onclick="copyOutput()">📋 Копировать перевод</button>
+                <button class="btn btn-secondary" onclick="speakOutput()">🔊 Прослушать перевод</button>
+                <button class="btn btn-secondary" onclick="stopSpeaking()">⏹ Остановить озвучивание</button>
+                <button class="btn btn-secondary" onclick="clearAll()">🗑 Очистить</button>
+            </div>
 
-            <button
-                type="button"
-                class="swap-btn"
-                id="swapLanguages"
-                aria-label="Поменять языки местами"
-                title="Поменять языки местами"
-            >⇄</button>
+            <div class="status" id="status"></div>
 
-            <select id="targetLanguage" aria-label="Язык перевода">
-                <option value="ru">Русский</option>
-                <option value="en" selected>Английский</option>
-                <option value="zh-CN">Китайский</option>
-                <option value="de">Немецкий</option>
-                <option value="fr">Французский</option>
-                <option value="es">Испанский</option>
-                <option value="it">Итальянский</option>
-                <option value="ja">Японский</option>
-                <option value="ko">Корейский</option>
-                <option value="tr">Турецкий</option>
-            </select>
+            <div class="history" id="history"></div>
         </div>
 
-        <textarea id="translateInput" placeholder="Введите текст для перевода..."></textarea>
-        <button class="btn" id="translateButton" type="button">Перевести</button>
-        <p class="translate-status" id="translateStatus" aria-live="polite"></p>
-        <textarea id="translateOutput" placeholder="Здесь появится перевод..." readonly></textarea>
-
-        <button class="btn" id="copyTranslationButton" type="button">
-            Копировать перевод
-        </button>
-        <button class="btn" id="speakTranslationButton" type="button">
-            🔊 Прослушать перевод
-        </button>
-        <button class="btn" id="stopSpeakingButton" type="button">
-            ⏹ Остановить озвучивание
-        </button>
-
-        <h2 class="section-title">Переводчик раскладки (QWERTY → ЙЦУКЕН)</h2>
-
-        <textarea
-            id="input"
-            placeholder="Вставьте текст с неправильной раскладкой, например ghbdtn..."
-        ></textarea>
-        <textarea id="output" placeholder="Результат появится здесь..." readonly></textarea>
-        <button class="btn" id="copyLayoutButton" type="button">
-            Копировать результат
-        </button>
-
-        <div class="clock-box">
-            <div class="clock-time" id="clockTime">00:00:00</div>
-            <div class="clock-date" id="clockDate">Время по МСК</div>
+        <!-- Переводчик раскладки -->
+        <div class="card">
+            <h2>⌨️ Переводчик раскладки (QWERTY → ЙЦУКЕН)</h2>
+            <textarea id="layoutInput" placeholder="Введите текст в неправильной раскладке, например: ghbdtn"></textarea>
+            <textarea id="layoutOutput" placeholder="Результат появится здесь..." readonly></textarea>
+            <div class="btn-row">
+                <button class="btn" onclick="convertLayout()">🔄 Конвертировать</button>
+                <button class="btn btn-secondary" onclick="copyLayout()">📋 Копировать результат</button>
+            </div>
         </div>
-    </main>
 
-    <!-- Правая боковая панель -->
-    <aside class="side-panel right-panel">
-        <div class="side-message">ВСЕ АНТОНЫ ЛОХИ</div>
-    </aside>
+        <div class="footer">
+            <div class="clock" id="clock"></div>
+            <div id="date"></div>
+        </div>
+    </div>
 
-</div>
-
-<script>
-    // Перевод английских символов раскладки в русские
-    const map = {
-        'q': 'й', 'w': 'ц', 'e': 'у', 'r': 'к', 't': 'е', 'y': 'н',
-        'u': 'г', 'i': 'ш', 'o': 'щ', 'p': 'з', '[': 'х', ']': 'ъ',
-        'a': 'ф', 's': 'ы', 'd': 'в', 'f': 'а', 'g': 'п', 'h': 'р',
-        'j': 'о', 'k': 'л', 'l': 'д', ';': 'ж', "'": 'э',
-        'z': 'я', 'x': 'ч', 'c': 'с', 'v': 'м', 'b': 'и', 'n': 'т',
-        'm': 'ь', ',': 'б', '.': 'ю', '/': '.',
-
-        'Q': 'Й', 'W': 'Ц', 'E': 'У', 'R': 'К', 'T': 'Е', 'Y': 'Н',
-        'U': 'Г', 'I': 'Ш', 'O': 'Щ', 'P': 'З', '{': 'Х', '}': 'Ъ',
-        'A': 'Ф', 'S': 'Ы', 'D': 'В', 'F': 'А', 'G': 'П', 'H': 'Р',
-        'J': 'О', 'K': 'Л', 'L': 'Д', ':': 'Ж', '"': 'Э',
-        'Z': 'Я', 'X': 'Ч', 'C': 'С', 'V': 'М', 'B': 'И', 'N': 'Т',
-        'M': 'Ь', '<': 'Б', '>': 'Ю', '?': ','
-    };
-
-    const input = document.getElementById('input');
-    const output = document.getElementById('output');
-    const themeSelect = document.getElementById('themeSelect');
-
-    input.addEventListener('input', () => {
-        let result = '';
-
-        for (const char of input.value) {
-            result += map[char] || char;
+    <script>
+        // ===== ТЕМЫ =====
+        function setTheme(theme) {
+            document.body.className = theme;
+            localStorage.setItem('theme', theme);
         }
+        // Загрузка сохранённой темы
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) setTheme(savedTheme);
 
-        output.value = result;
-    });
-
-    async function copyToClipboard(text) {
-        if (!text) return false;
-
-        try {
-            await navigator.clipboard.writeText(text);
-            return true;
-        } catch {
-            return false;
-        }
-    }
-
-    document.getElementById('copyLayoutButton').addEventListener('click', async () => {
-        if (!output.value) return;
-
-        const copied = await copyToClipboard(output.value);
-
-        if (copied) {
-            alert('Текст скопирован!');
-        } else {
-            output.select();
-            document.execCommand('copy');
-            alert('Текст скопирован!');
-        }
-    });
-
-    // Переключение темы
-    themeSelect.addEventListener('change', (event) => {
-        const selectedTheme = event.target.value;
-
-        if (selectedTheme === 'light') {
-            document.documentElement.removeAttribute('data-theme');
-        } else {
-            document.documentElement.setAttribute('data-theme', selectedTheme);
-        }
-    });
-
-    // Обычный онлайн-переводчик
-    const translateInput = document.getElementById('translateInput');
-    const translateOutput = document.getElementById('translateOutput');
-    const sourceLanguage = document.getElementById('sourceLanguage');
-    const targetLanguage = document.getElementById('targetLanguage');
-    const translateButton = document.getElementById('translateButton');
-    const translateStatus = document.getElementById('translateStatus');
-
-    translateButton.addEventListener('click', translateText);
-
-    async function translateText() {
-        const text = translateInput.value.trim();
-
-        if (!text) {
-            translateStatus.textContent = 'Сначала введите текст для перевода.';
-            return;
-        }
-
-        if (sourceLanguage.value === targetLanguage.value) {
-            translateOutput.value = text;
-            translateStatus.textContent = 'Выбраны одинаковые языки.';
-            return;
-        }
-
-        translateButton.disabled = true;
-        translateStatus.textContent = 'Переводим…';
-
-        try {
-            const langPair = `${sourceLanguage.value}|${targetLanguage.value}`;
-            const url =
-                'https://api.mymemory.translated.net/get' +
-                `?q=${encodeURIComponent(text)}` +
-                `&langpair=${encodeURIComponent(langPair)}`;
-
-            const response = await fetch(url);
-
-            if (!response.ok) {
-                throw new Error('Сервис перевода временно недоступен.');
-            }
-
-            const data = await response.json();
-
-            if (
-                Number(data.responseStatus) !== 200 ||
-                !data.responseData ||
-                !data.responseData.translatedText
-            ) {
-                throw new Error(
-                    data.responseDetails || 'Не удалось перевести текст.'
-                );
-            }
-
-            translateOutput.value = data.responseData.translatedText;
-            translateStatus.textContent = 'Перевод готов.';
-        } catch (error) {
-            translateStatus.textContent =
-                error.message || 'Ошибка. Проверьте подключение к интернету.';
-        } finally {
-            translateButton.disabled = false;
-        }
-    }
-
-    // Поменять языки и тексты местами
-    document.getElementById('swapLanguages').addEventListener('click', () => {
-        const oldSourceLanguage = sourceLanguage.value;
-        sourceLanguage.value = targetLanguage.value;
-        targetLanguage.value = oldSourceLanguage;
-
-        const oldText = translateInput.value;
-        translateInput.value = translateOutput.value;
-        translateOutput.value = oldText;
-
-        translateStatus.textContent = '';
-    });
-
-    // Копировать перевод
-    document.getElementById('copyTranslationButton').addEventListener('click', async () => {
-        if (!translateOutput.value) {
-            translateStatus.textContent = 'Сначала переведите текст.';
-            return;
-        }
-
-        const copied = await copyToClipboard(translateOutput.value);
-
-        if (copied) {
-            translateStatus.textContent = 'Перевод скопирован.';
-        } else {
-            translateOutput.select();
-            document.execCommand('copy');
-            translateStatus.textContent = 'Перевод скопирован.';
-        }
-    });
-
-    // Озвучивание перевода
-    document.getElementById('speakTranslationButton').addEventListener('click', () => {
-        const text = translateOutput.value.trim();
-
-        if (!text) {
-            translateStatus.textContent = 'Сначала переведите текст.';
-            return;
-        }
-
-        if (!('speechSynthesis' in window)) {
-            translateStatus.textContent =
-                'Озвучивание не поддерживается этим браузером.';
-            return;
-        }
-
-        window.speechSynthesis.cancel();
-
-        const speech = new SpeechSynthesisUtterance(text);
-        speech.lang = targetLanguage.value;
-
-        speech.onstart = () => {
-            translateStatus.textContent = 'Озвучиваем перевод…';
-        };
-
-        speech.onend = () => {
-            translateStatus.textContent = 'Озвучивание завершено.';
-        };
-
-        speech.onerror = () => {
-            translateStatus.textContent =
-                'Не удалось озвучить текст. Возможно, для языка нет голоса.';
-        };
-
-        window.speechSynthesis.speak(speech);
-    });
-
-    document.getElementById('stopSpeakingButton').addEventListener('click', () => {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            translateStatus.textContent = 'Озвучивание остановлено.';
-        }
-    });
-
-    // Таймер до ближайшей границы 4-часового цикла UTC
-    function updateStockCountdown() {
-        const countdownElement = document.getElementById('stockCountdown');
-        const now = new Date();
-        const utcHour = now.getUTCHours();
-
-        let hoursUntilNext = 4 - (utcHour % 4);
-        let nextUpdate = new Date(now);
-
-        nextUpdate.setUTCHours(utcHour + hoursUntilNext, 0, 0, 0);
-
-        let remainingMs = nextUpdate.getTime() - now.getTime();
-
-        if (remainingMs <= 0) {
-            remainingMs = 4 * 60 * 60 * 1000;
-        }
-
-        const totalSeconds = Math.floor(remainingMs / 1000);
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-
-        countdownElement.textContent =
-            `${String(hours).padStart(2, '0')}:` +
-            `${String(minutes).padStart(2, '0')}:` +
-            `${String(seconds).padStart(2, '0')}`;
-    }
-
-    setInterval(updateStockCountdown, 1000);
-    updateStockCountdown();
-
-    // Часы по Москве
-    function updateMskClock() {
-        const now = new Date();
-
-        document.getElementById('clockTime').textContent =
-            now.toLocaleTimeString('ru-RU', {
-                timeZone: 'Europe/Moscow',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
+        // ===== ЧАСЫ =====
+        function updateClock() {
+            const now = new Date();
+            const msk = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
+            document.getElementById('clock').textContent = msk.toLocaleTimeString('ru-RU');
+            document.getElementById('date').textContent = msk.toLocaleDateString('ru-RU', {
+                weekday: 'long', day: 'numeric', month: 'long'
             });
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
 
-        let dateString = now.toLocaleDateString('ru-RU', {
-            timeZone: 'Europe/Moscow',
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long'
+        // ===== СЧЁТЧИК СИМВОЛОВ =====
+        document.getElementById('inputText').addEventListener('input', function() {
+            document.getElementById('charCount').textContent = this.value.length + ' / 500 символов';
         });
 
-        dateString =
-            dateString.charAt(0).toUpperCase() +
-            dateString.slice(1) +
-            ' (МСК)';
+        // ===== ПЕРЕВОД =====
+        async function translateText() {
+            const input = document.getElementById('inputText').value.trim();
+            const from = document.getElementById('fromLang').value;
+            const to = document.getElementById('toLang').value;
+            const status = document.getElementById('status');
 
-        document.getElementById('clockDate').textContent = dateString;
-    }
+            if (!input) {
+                showStatus('Пожалуйста, введите текст для перевода.', 'error');
+                return;
+            }
 
-    setInterval(updateMskClock, 1000);
-    updateMskClock();
-</script>
+            showStatus('Перевод...', 'loading');
+
+            try {
+                // Используем бесплатный MyMemory API
+                const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(input)}&langpair=${from}|${to}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.responseStatus === 200) {
+                    document.getElementById('outputText').value = data.responseData.translatedText;
+                    showStatus('✅ Перевод выполнен!', 'success');
+                    addToHistory(input, data.responseData.translatedText, from, to);
+                } else {
+                    showStatus('Ошибка перевода: ' + data.responseDetails, 'error');
+                }
+            } catch (error) {
+                showStatus('Ошибка сети. Проверьте подключение к интернету.', 'error');
+            }
+        }
+
+        // ===== КОПИРОВАНИЕ =====
+        function copyOutput() {
+            const output = document.getElementById('outputText');
+            if (!output.value) {
+                showStatus('Нет перевода для копирования.', 'error');
+                return;
+            }
+            navigator.clipboard.writeText(output.value).then(() => {
+                showStatus('✅ Перевод скопирован!', 'success');
+            });
+        }
+
+        // ===== ОЗВУЧИВАНИЕ =====
+        function speakOutput() {
+            const text = document.getElementById('outputText').value;
+            if (!text) {
+                showStatus('Нет перевода для озвучивания.', 'error');
+                return;
+            }
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = document.getElementById('toLang').value;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                showStatus('Ваш браузер не поддерживает озвучивание.', 'error');
+            }
+        }
+
+        function stopSpeaking() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        // ===== ОЧИСТКА =====
+        function clearAll() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('outputText').value = '';
+            document.getElementById('charCount').textContent = '0 / 500 символов';
+            document.getElementById('status').style.display = 'none';
+        }
+
+        // ===== СМЕНА ЯЗЫКОВ =====
+        function swapLanguages() {
+            const from = document.getElementById('fromLang');
+            const to = document.getElementById('toLang');
+            const temp = from.value;
+            from.value = to.value;
+            to.value = temp;
+        }
+
+        // ===== СТАТУС =====
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = 'status ' + type;
+            setTimeout(() => { status.style.display = 'none'; }, 5000);
+        }
+
+        // ===== ИСТОРИЯ =====
+        function addToHistory(input, output, from, to) {
+            const history = document.getElementById('history');
+            const item = document.createElement('div');
+            item.className = 'history-item';
+            const langNames = {
+                ru: 'Русский', en: 'Английский', zh: 'Китайский', de: 'Немецкий',
+                fr: 'Французский', es: 'Испанский', it: 'Итальянский',
+                ja: 'Японский', ko: 'Корейский', tr: 'Турецкий'
+            };
+            item.innerHTML = `<small>${langNames[from]} → ${langNames[to]}</small><br>
+                              <strong>${input}</strong><br>${output}`;
+            history.prepend(item);
+        }
+
+        // ===== ПЕРЕВОД РАСКЛАДКИ =====
+        const qwertyToYtsuken = {
+            'q': 'й', 'w': 'ц', 'e': 'у', 'r': 'к', 't': 'е', 'y': 'н', 'u': 'г',
+            'i': 'ш', 'o': 'щ', 'p': 'з', '[': 'х', ']': 'ъ', 'a': 'ф', 's': 'ы',
+            'd': 'в', 'f': 'а', 'g': 'п', 'h': 'р', 'j': 'о', 'k': 'л', 'l': 'д',
+            ';': 'ж', "'": 'э', 'z': 'я', 'x': 'ч', 'c': 'с', 'v': 'м', 'b': 'и',
+            'n': 'т', 'm': 'ь', ',': 'б', '.': 'ю', '`': 'ё'
+        };
+
+        function convertLayout() {
+            const input = document.getElementById('layoutInput').value;
+            let result = '';
+            for (let char of input) {
+                const lower = char.toLowerCase();
+                if (qwertyToYtsuken[lower]) {
+                    result += char === lower ? qwertyToYtsuken[lower] : qwertyToYtsuken[lower].toUpperCase();
+                } else {
+                    result += char;
+                }
+            }
+            document.getElementById('layoutOutput').value = result;
+        }
+
+        function copyLayout() {
+            const output = document.getElementById('layoutOutput');
+            if (!output.value) return;
+            navigator.clipboard.writeText(output.value);
+        }
+    </script>
 </body>
 </html>
